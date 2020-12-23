@@ -113,7 +113,8 @@ class Board:
 
 
 class Men:
-    """ Create a men which could be either black or white. Can be assign to a self.field variable.
+    """
+        Create a men which could be either black or white. Can be assign to a self.field variable.
 
     """
 
@@ -158,8 +159,6 @@ class Men:
                 allowed_moves.append(current_field_number - 7)
                 allowed_moves.append(current_field_number - 9)
 
-        print(allowed_moves)
-
         if new_field_number in allowed_moves:
             return True
         else:
@@ -167,7 +166,8 @@ class Men:
 
 
 class King(Men):
-    """ Create a king which could be either black or white. Can be assign to a self.field variable.
+    """
+        Create a king which could be either black or white. Can be assign to a self.field variable.
 
     """
 
@@ -184,26 +184,26 @@ class King(Men):
         pass
 
 
-if __name__ == '__main__':
-    print("\nHello Checkers!\n")
-    board = Board()
-    print(board)
-
-    white_men = Men('white')
-    # print(white_men)
-    black_men = Men('black')
-    # print(black_men.color)
-    # print(type(black_men.color))
-    # print(white_men.color)
-    # print(black_men)
-
-    board.make_men_move_on_board('6D', '5E', white_men.color)
-    board.make_men_move_on_board('3A', '4B', black_men.color)
-    board.make_men_move_on_board('6H', '5G', white_men.color)
-    board.make_men_move_on_board('4B', '5C', black_men.color)
-    board.make_men_move_on_board('5C', '6D', black_men.color)
-
-    print(board)
-
-    # black_King = King('white')
-    # print(black_King)
+# if __name__ == '__main__':
+#     print("\nHello Checkers!\n")
+#     board = Board()
+#     print(board)
+#
+#     white_men = Men('white')
+#     # print(white_men)
+#     black_men = Men('black')
+#     # print(black_men.color)
+#     # print(type(black_men.color))
+#     # print(white_men.color)
+#     # print(black_men)
+#
+#     board.make_men_move_on_board('6D', '5E', white_men.color)
+#     board.make_men_move_on_board('3A', '4B', black_men.color)
+#     board.make_men_move_on_board('6H', '5G', white_men.color)
+#     board.make_men_move_on_board('4B', '5C', black_men.color)
+#     board.make_men_move_on_board('5C', '6D', black_men.color)
+#
+#     print(board)
+#
+#     # black_King = King('white')
+#     # print(black_King)
