@@ -1,6 +1,7 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
+from kivy.core.window import Window
 
 Builder.load_file('checkers.kv')
 
@@ -21,6 +22,7 @@ class CheckersLayout(Widget):
 
 class CheckersApp(App):
     def build(self):
+        Window.clearcolor = (.655, .682, .682, 1)
         return CheckersLayout()
 
 
