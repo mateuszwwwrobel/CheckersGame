@@ -40,17 +40,15 @@
 
                 CheckBox:
                     id: black_color_checkbox
+                    group: 'color_choice'
                     color: (.969, .573, .063, 1)
                     active: False
-                    on_active: if self.active: root.checkbox_active(black_color_checkbox, white_color_checkbox)
-                    on_active: if not self.active: root.checkbox_active(black_color_checkbox, white_color_checkbox)
 
                 CheckBox:
                     id: white_color_checkbox
+                    group: 'color_choice'
                     color: (.969, .573, .063, 1)
                     active: False
-                    on_active: if self.active: root.checkbox_active(white_color_checkbox, black_color_checkbox)
-                    on_active: if not self.active: root.checkbox_active(white_color_checkbox, black_color_checkbox)
 
         BoxLayout:
             orientation: 'horizontal'
@@ -65,7 +63,7 @@
                 color: (.231, .353, .553, 1)
                 background_normal: 'img/white_blank.png'
                 background_down: 'img/clicked.png'
-                on_press: root.new_game()
+                on_press: root.new_game(black_color_checkbox, white_color_checkbox)
 
             Button:
                 id: quit_button
