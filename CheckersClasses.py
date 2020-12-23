@@ -48,25 +48,11 @@ class Board:
         for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
 
             if self.color == 'white':
-                if self.field[upper_field] is None:
-                    self.field[upper_field] = Men('black')
-                else:
-                    raise ValueError('Field is not empty.')
-
-                if self.field[bottom_field] is None:
-                    self.field[bottom_field] = Men('white')
-                else:
-                    raise ValueError('Field is not empty.')
+                self.field[upper_field] = Men('black')
+                self.field[bottom_field] = Men('white')
             else:
-                if self.field[upper_field] is None:
-                    self.field[upper_field] = Men('white')
-                else:
-                    raise ValueError('Field is not empty.')
-
-                if self.field[bottom_field] is None:
-                    self.field[bottom_field] = Men('black')
-                else:
-                    raise ValueError('Field is not empty.')
+                self.field[upper_field] = Men('white')
+                self.field[bottom_field] = Men('black')
 
     def __str__(self):
         board_field_code = []
