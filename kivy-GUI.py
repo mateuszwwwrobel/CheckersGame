@@ -2,6 +2,8 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.core.window import Window
+from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 
 from CheckersClasses import Board
 
@@ -20,14 +22,26 @@ class CheckersLayout(Widget):
         """
 
         if checkbox_1.active:
-            # black color
             print('black')
-            game_board = Board()
-            # print(game_board)
+            game_board = Board('black')
+            print(game_board)
+
         elif checkbox_2.active:
             print('white')
+            game_board = Board('white')
+            print(game_board)
+
         else:
-            print('choose a color.')
+            info_button = Button(text='Please choose a color first.',
+                                 font_size=22,
+                                 bold=True,
+                                 background_normal='img/white_blank.png',
+                                 background_down='img/clicked.png',
+                                 color=(.231, .353, .553, 1),
+                                 )
+            popup_message = self.popup_box('Color Error', info_button)
+            popup_message.open()
+            info_button.bind(on_press=popup_message.dismiss)
 
     def board_field_clicked(self):
         pass
@@ -37,6 +51,16 @@ class CheckersLayout(Widget):
 
     def king_move(self):
         pass
+
+    @staticmethod
+    def popup_box(title, content):
+        popup_box = Popup(title=title,
+                          title_align='center',
+                          content=content,
+                          size_hint=(.4, .4),
+                          size=(200, 200),
+                          )
+        return popup_box
 
 
 class CheckersApp(App):

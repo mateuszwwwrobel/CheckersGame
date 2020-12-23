@@ -9,7 +9,8 @@ class Board:
 
     """
 
-    def __init__(self):
+    def __init__(self, color):
+        self.color = color
         self.board = {}
         self.field = {}
 
@@ -44,19 +45,28 @@ class Board:
                                   bottom_starting_fields[56:64:2]
                                   )
 
-        # TODO: Validate which color is top color and which is bottom.
-
         for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
 
-            if self.field[upper_field] is None:
-                self.field[upper_field] = Men('white')
-            else:
-                raise ValueError('Field is not empty.')
+            if self.color == 'white':
+                if self.field[upper_field] is None:
+                    self.field[upper_field] = Men('black')
+                else:
+                    raise ValueError('Field is not empty.')
 
-            if self.field[bottom_field] is None:
-                self.field[bottom_field] = Men('black')
+                if self.field[bottom_field] is None:
+                    self.field[bottom_field] = Men('white')
+                else:
+                    raise ValueError('Field is not empty.')
             else:
-                raise ValueError('Field is not empty.')
+                if self.field[upper_field] is None:
+                    self.field[upper_field] = Men('white')
+                else:
+                    raise ValueError('Field is not empty.')
+
+                if self.field[bottom_field] is None:
+                    self.field[bottom_field] = Men('black')
+                else:
+                    raise ValueError('Field is not empty.')
 
     def __str__(self):
         board_field_code = []
