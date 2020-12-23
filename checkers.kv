@@ -13,8 +13,68 @@
             text: 'WELCOME TO THE GAME OF CHECKERS!'
             bold: True
             color: (.231, .353, .553, 1)
-            size_hint: (1, 0.15)
+            size_hint: (1, 0.1)
 
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1, 0.1)
+
+            BoxLayout:
+                orientation: 'vertical'
+
+                Label:
+                    id: black_color_label
+                    text: 'Black'
+                    color: 'black'
+                    font_size: 20
+                    size_hint: (1, 0.10)
+
+                Label:
+                    id: white_color_label
+                    text: 'White'
+                    font_size: 20
+                    size_hint: (1, 0.10)
+
+            BoxLayout:
+                orientation: 'vertical'
+
+                CheckBox:
+                    id: black_color_checkbox
+                    color: (.969, .573, .063, 1)
+                    active: False
+                    on_active: if self.active: root.checkbox_active(black_color_checkbox, white_color_checkbox)
+                    on_active: if not self.active: root.checkbox_active(black_color_checkbox, white_color_checkbox)
+
+                CheckBox:
+                    id: white_color_checkbox
+                    color: (.969, .573, .063, 1)
+                    active: False
+                    on_active: if self.active: root.checkbox_active(white_color_checkbox, black_color_checkbox)
+                    on_active: if not self.active: root.checkbox_active(white_color_checkbox, black_color_checkbox)
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1, 0.1)
+            padding: 5
+
+            Button:
+                id: new_game_button
+                text: 'Play New Game'
+                font_size: 22
+                bold: True
+                color: (.231, .353, .553, 1)
+                background_normal: 'img/white_blank.png'
+                background_down: 'img/clicked.png'
+                on_press: root.new_game()
+
+            Button:
+                id: quit_button
+                text: 'Quit Game'
+                font_size: 22
+                bold: True
+                color: (.231, .353, .553, 1)
+                background_normal: 'img/white_blank.png'
+                background_down: 'img/clicked.png'
 
         GridLayout:
             cols: 8
@@ -482,3 +542,11 @@
                 size_hint: (0.1, 0.15)
                 background_normal: 'img/white_blank.png'
                 background_down: 'img/clicked.png'
+
+        Label:
+            id: footer_label
+            font_size: 12
+            text: 'Checkers Game - Wrobel Mateusz'
+            bold: True
+            color: (.231, .353, .553, 1)
+            size_hint: (1, 0.08)
