@@ -10,7 +10,11 @@ class Board:
     """
 
     def __init__(self, color):
-        self.color = color
+        self.bottom_color = color
+        if self.bottom_color == 'white':
+            self.upper_color = 'black'
+        else:
+            self.upper_color = 'white'
         self.board = {}
         self.field = {}
 
@@ -47,7 +51,7 @@ class Board:
 
         for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
 
-            if self.color == 'white':
+            if self.bottom_color == 'white':
                 self.field[upper_field] = Men('black')
                 self.field[bottom_field] = Men('white')
             else:
@@ -142,6 +146,9 @@ class Men:
         top_row = [1, 2, 3, 4, 5, 6, 7, 8]
         bottom_row = [57, 58, 59, 60, 61, 62, 63, 64]
 
+        # self.bottom_color
+        # self.upper_color
+
         if color == 'white':
             if current_field_number in right_border:
                 allowed_moves.append(current_field_number + 7)
@@ -156,7 +163,7 @@ class Men:
                 allowed_moves.append(current_field_number - 9)
 
         if new_field_number in allowed_moves:
-            return True
+            return allowed_moves
         else:
             return False
 
@@ -180,26 +187,27 @@ class King(Men):
         pass
 
 
-# if __name__ == '__main__':
-#     print("\nHello Checkers!\n")
-#     board = Board()
-#     print(board)
-#
-#     white_men = Men('white')
-#     # print(white_men)
-#     black_men = Men('black')
-#     # print(black_men.color)
-#     # print(type(black_men.color))
-#     # print(white_men.color)
-#     # print(black_men)
-#
-#     board.make_men_move_on_board('6D', '5E', white_men.color)
-#     board.make_men_move_on_board('3A', '4B', black_men.color)
-#     board.make_men_move_on_board('6H', '5G', white_men.color)
-#     board.make_men_move_on_board('4B', '5C', black_men.color)
-#     board.make_men_move_on_board('5C', '6D', black_men.color)
-#
-#     print(board)
-#
-#     # black_King = King('white')
-#     # print(black_King)
+if __name__ == '__main__':
+    print("\nHello Checkers!\n")
+    board = Board('black')
+    print(board)
+
+    white_men = Men('white')
+    # print(white_men)
+    black_men = Men('black')
+    # print(black_men.color)
+    # print(type(black_men.color))
+    # print(white_men.color)
+    # print(black_men)
+
+    board.make_men_move_on_board('3A', '4B', black_men.color)
+    print(white_men.get_allowed_moves(41, 34, 'black'))
+    # board.make_men_move_on_board('3A', '4B', black_men.color)
+    # board.make_men_move_on_board('6H', '5G', white_men.color)
+    # board.make_men_move_on_board('4B', '5C', black_men.color)
+    # board.make_men_move_on_board('5C', '6D', black_men.color)
+
+    print(board)
+
+    # black_King = King('white')
+    # print(black_King)
