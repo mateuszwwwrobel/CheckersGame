@@ -12,6 +12,7 @@ Builder.load_file('checkers.kv')
 
 class CheckersLayout(Widget):
     def __init__(self):
+        self.board = None
         super(CheckersLayout, self).__init__()
 
     def new_game(self, checkbox_1, checkbox_2):
@@ -22,14 +23,10 @@ class CheckersLayout(Widget):
         """
 
         if checkbox_1.active:
-            print('black')
-            game_board = Board('black')
-            print(game_board)
+            self.put_men_on_board('black')
 
         elif checkbox_2.active:
-            print('white')
-            game_board = Board('white')
-            print(game_board)
+            self.put_men_on_board('white')
 
         else:
             info_button = Button(text='Please choose a color first.',
@@ -42,6 +39,48 @@ class CheckersLayout(Widget):
             popup_message = self.popup_box('Color Error', info_button)
             popup_message.open()
             info_button.bind(on_press=popup_message.dismiss)
+
+    def put_men_on_board(self, color):
+        # Initialize backend board.
+        self.board = Board(color)
+
+        # Initialize frontend board.
+        bottom_starting_fields = [self.ids.board_button_41,
+                                  self.ids.board_button_43,
+                                  self.ids.board_button_45,
+                                  self.ids.board_button_47,
+                                  self.ids.board_button_50,
+                                  self.ids.board_button_52,
+                                  self.ids.board_button_54,
+                                  self.ids.board_button_56,
+                                  self.ids.board_button_57,
+                                  self.ids.board_button_59,
+                                  self.ids.board_button_61,
+                                  self.ids.board_button_63,
+                                  ]
+
+        upper_starting_fields = [self.ids.board_button_2,
+                                 self.ids.board_button_4,
+                                 self.ids.board_button_6,
+                                 self.ids.board_button_8,
+                                 self.ids.board_button_9,
+                                 self.ids.board_button_11,
+                                 self.ids.board_button_13,
+                                 self.ids.board_button_15,
+                                 self.ids.board_button_18,
+                                 self.ids.board_button_20,
+                                 self.ids.board_button_22,
+                                 self.ids.board_button_24,
+                                 ]
+
+        if color == 'black':
+            for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
+                bottom_field.background_normal = 'img/black_black_men.png'
+                upper_field.background_normal = 'img/black_white_men.png'
+        else:
+            for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
+                bottom_field.background_normal = 'img/black_white_men.png'
+                upper_field.background_normal = 'img/black_black_men.png'
 
     def board_field_clicked(self):
         pass
@@ -64,9 +103,12 @@ class CheckersLayout(Widget):
 
 
 class CheckersApp(App):
+    icon = 'img/icon.png'
+
     def build(self):
-        Window.size = (800, 800)
+        Window.size = (1100, 1100)
         Window.clearcolor = (.655, .682, .682, 1)
+
         return CheckersLayout()
 
 
