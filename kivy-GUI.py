@@ -18,6 +18,7 @@ class CheckersLayout(Widget):
         self.bottom_color = None
         self.upper_color = None
         self.last_clicked_button = None
+        self.board_button = {}
         self.init_buttons()
         super(CheckersLayout, self).__init__()
 
@@ -25,16 +26,18 @@ class CheckersLayout(Widget):
     def init_buttons(self):
         white_fields = [1, 3, 5, 7, 10, 12, 14, 16, 17, 19, 21, 23, 26, 28, 30, 32,
                         33, 35, 37, 39, 42, 44, 46, 48, 49, 51, 53, 55, 58, 60, 62, 64]
-        for button in range(1, 65):
-            if button in white_fields:
-                button = Button(text=f'board_button_{str(button)}')
+        for button_number in range(1, 65):
+            if button_number in white_fields:
+                button = Button()
                 button.background_normal = 'img/white_blank.png'
                 button.background_down = 'img/clicked.png'
             else:
-                button = Button(text=f'board_button_{str(button)}')
+                button = Button(text=f'{button_number}')
                 button.background_normal = 'img/black_blank.png'
+                button.color = (1, 1, 1, 0)
                 button.background_down = 'img/clicked.png'
             self.ids.buttons_widget.add_widget(button)
+            self.board_button[button_number] = button
 
     def new_game(self, checkbox_1, checkbox_2):
         """
@@ -70,99 +73,66 @@ class CheckersLayout(Widget):
         self.board = Board(self.bottom_color)
 
         # Initialize frontend board.
-        bottom_starting_fields = [self.ids.board_button_41,
-                                  self.ids.board_button_43,
-                                  self.ids.board_button_45,
-                                  self.ids.board_button_47,
-                                  self.ids.board_button_50,
-                                  self.ids.board_button_52,
-                                  self.ids.board_button_54,
-                                  self.ids.board_button_56,
-                                  self.ids.board_button_57,
-                                  self.ids.board_button_59,
-                                  self.ids.board_button_61,
-                                  self.ids.board_button_63,
-                                  ]
-
-        upper_starting_fields = [self.ids.board_button_2,
-                                 self.ids.board_button_4,
-                                 self.ids.board_button_6,
-                                 self.ids.board_button_8,
-                                 self.ids.board_button_9,
-                                 self.ids.board_button_11,
-                                 self.ids.board_button_13,
-                                 self.ids.board_button_15,
-                                 self.ids.board_button_18,
-                                 self.ids.board_button_20,
-                                 self.ids.board_button_22,
-                                 self.ids.board_button_24,
-                                 ]
+        upper_starting_fields = [2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 22, 24]
+        bottom_starting_fields = [41, 43, 45, 47, 50, 52, 54, 56, 57, 59, 61, 63]
+        middle_fields = [25, 27, 29, 31, 34, 36, 38, 40]
 
         if self.bottom_color == 'black':
-            for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
-                bottom_field.background_normal = 'img/black_black_men.png'
-                upper_field.background_normal = 'img/black_white_men.png'
-            return True
-        elif self.bottom_color == 'white':
-            for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
-                bottom_field.background_normal = 'img/black_white_men.png'
-                upper_field.background_normal = 'img/black_black_men.png'
-            return True
+            for field_number in bottom_starting_fields:
+                self.board_button[field_number].background_normal = 'img/black_black_men.png'
+                self.board_button[field_number].bind(on_press=self.board_field_clicked)
+            for field_number in upper_starting_fields:
+                self.board_button[field_number].background_normal = 'img/black_white_men.png'
+                self.board_button[field_number].bind(on_press=self.board_field_clicked)
+
         else:
-            raise AttributeError("Something went wrong. Try again.")
+            for field_number in bottom_starting_fields:
+                self.board_button[field_number].background_normal = 'img/black_white_men.png'
+                self.board_button[field_number].bind(on_press=self.board_field_clicked)
+            for field_number in upper_starting_fields:
+                self.board_button[field_number].background_normal = 'img/black_black_men.png'
+                self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
-    def board_field_clicked(self, field_number):
-        if self.board is None:
-            info_button = Button(text='Please start a game first.',
-                                 font_size=22,
-                                 bold=True,
-                                 background_normal='img/white_blank.png',
-                                 background_down='img/clicked.png',
-                                 color=(.231, .353, .553, 1),
-                                 )
-            popup_message = self.popup_box_message('Start Game Error', info_button)
-            popup_message.open()
-            info_button.bind(on_press=popup_message.dismiss)
-        else:
-            if self.last_clicked_button is None:
-                self.last_clicked_button = field_number
+        for field_number in middle_fields:
+            self.board_button[field_number].background_normal = 'img/black_blank.png'
+            self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
-                # change background of current 'field_number' field:
+    def board_field_clicked(self, button_instance):
+        button_number = int(button_instance.text)
+        button_code = self.board.board[button_number]
+        button_instance = self.board.field[button_code]
 
-                field_code = self.board.board[field_number]
-
-
-
-                self.ids.board_button_41.background_normal = 'img/clicked.png'
+        if isinstance(button_instance, Men) and self.last_clicked_button is None:
+            if button_instance.color == self.bottom_color:
+                self.last_clicked_button = button_number
+                self.board_button[button_number].background_normal = 'img/clicked.png'
             else:
-                # TODO: proper popup box to be done.
-                print('You have selected a pawn. Where do you want to move it?')
-
-    def pawn_move(self, field_number):
-        if self.last_clicked_button is not None:
-            allowed_moves = Men.get_allowed_player_moves(self.last_clicked_button, field_number)
-
-            if field_number in allowed_moves:
-
-                self.board.make_men_move_on_board('3A', '4B', self.bottom_color)
-
+                pass
+        elif self.last_clicked_button is not None:
+            if isinstance(button_instance, Men):
                 if self.bottom_color == 'black':
-                    self.ids.board_button_34.background_normal = 'img/black_black_men.png'
+                    self.board_button[self.last_clicked_button].background_normal = 'img/black_black_men.png'
+                    self.last_clicked_button = None
                 else:
-                    self.ids.board_button_34.background_normal = 'img/black_white_men.png'
-
-                self.ids.board_button_41.background_normal = 'img/black_blank.png'
-
-                self.last_clicked_button = None
-
-                print(self.board)
-
+                    self.board_button[self.last_clicked_button].background_normal = 'img/black_white_men.png'
+                    self.last_clicked_button = None
             else:
-                print('Illegal move. Try again.')
+                allowed_moves = Men.get_allowed_player_moves(self.last_clicked_button, button_number)
+
+                if button_number in allowed_moves:
+                    current_code = self.board.board[self.last_clicked_button]
+                    new_code = self.board.board[button_number]
+                    self.board.make_men_move_on_board(current_code, new_code, self.bottom_color)
+
+                    if self.bottom_color == 'black':
+                        self.board_button[button_number].background_normal = 'img/black_black_men.png'
+                    else:
+                        self.board_button[button_number].background_normal = 'img/black_white_men.png'
+
+                    self.board_button[self.last_clicked_button].background_normal = 'img/black_blank.png'
+                    self.last_clicked_button = None
         else:
-            print('Select pawn first.')
-
-
+            pass
 
     def king_move(self):
         pass
@@ -217,6 +187,7 @@ class CheckersApp(App):
         Window.clearcolor = (.655, .682, .682, 1)
 
         return CheckersLayout()
+
 
 if __name__ == '__main__':
     CheckersApp().run()
