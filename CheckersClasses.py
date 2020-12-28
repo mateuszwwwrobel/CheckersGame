@@ -103,7 +103,7 @@ class Board:
         current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
         new_field_number = list(self.board.keys())[list(self.board.values()).index(new_position)]
 
-        if Men.get_allowed_moves(current_field_number, new_field_number, color) and self.field[new_position] is None:
+        if Men.get_allowed_player_moves(current_field_number, new_field_number) and self.field[new_position] is None:
             if color is 'white':
                 self.field[new_position] = Men('white')
             else:
@@ -129,16 +129,8 @@ class Men:
     def __str__(self):
         return f"{self.color.capitalize()} Men"
 
-    # def make_men_move(self, color):
-    #     if color == 'white':
-    #         Board.make_move_on_board('white')
-    #     elif color == 'black':
-    #         Board.make_move_on_board('black')
-    #     else:
-    #         raise ValueError('Wrong Men Color.')
-
     @staticmethod
-    def get_allowed_moves(current_field_number, new_field_number, color):
+    def get_allowed_player_moves(current_field_number, new_field_number):
         allowed_moves = []
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
@@ -146,26 +138,18 @@ class Men:
         top_row = [1, 2, 3, 4, 5, 6, 7, 8]
         bottom_row = [57, 58, 59, 60, 61, 62, 63, 64]
 
-        # self.bottom_color
-        # self.upper_color
-
-        if color == 'white':
-            if current_field_number in right_border:
-                allowed_moves.append(current_field_number + 7)
-            else:
-                allowed_moves.append(current_field_number + 7)
-                allowed_moves.append(current_field_number + 9)
+        if current_field_number in left_border:
+            allowed_moves.append(current_field_number - 7)
+        elif current_field_number in right_border:
+            allowed_moves.append(current_field_number - 9)
         else:
-            if current_field_number in left_border:
-                allowed_moves.append(current_field_number - 7)
-            else:
-                allowed_moves.append(current_field_number - 7)
-                allowed_moves.append(current_field_number - 9)
+            allowed_moves.append(current_field_number + 7)
+            allowed_moves.append(current_field_number + 9)
 
         if new_field_number in allowed_moves:
             return allowed_moves
         else:
-            return False
+            return allowed_moves
 
 
 class King(Men):
@@ -201,7 +185,7 @@ if __name__ == '__main__':
     # print(black_men)
 
     board.make_men_move_on_board('3A', '4B', black_men.color)
-    print(white_men.get_allowed_moves(41, 34, 'black'))
+    print(white_men.get_allowed_player_moves(41, 34))
     # board.make_men_move_on_board('3A', '4B', black_men.color)
     # board.make_men_move_on_board('6H', '5G', white_men.color)
     # board.make_men_move_on_board('4B', '5C', black_men.color)

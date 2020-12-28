@@ -1,4 +1,6 @@
 
+
+
 <CheckersLayout>
 
     BoxLayout:
@@ -15,6 +17,13 @@
             color: (.231, .353, .553, 1)
             size_hint: (1, 0.1)
 
+        Label:
+            text: "Choose your color:"
+            bold: True
+            font_size: 22
+            color: (.231, .353, .553, 1)
+            size_hint: (1, 0.05)
+
         BoxLayout:
             orientation: 'horizontal'
             size_hint: (1, 0.1)
@@ -26,23 +35,25 @@
                     id: black_color_label
                     text: 'Black'
                     color: 'black'
+                    bold: True
                     font_size: 20
                     size_hint: (1, 0.10)
-
-                Label:
-                    id: white_color_label
-                    text: 'White'
-                    font_size: 20
-                    size_hint: (1, 0.10)
-
-            BoxLayout:
-                orientation: 'vertical'
 
                 CheckBox:
                     id: black_color_checkbox
                     group: 'color_choice'
                     color: (.969, .573, .063, 1)
                     active: False
+
+            BoxLayout:
+                orientation: 'vertical'
+
+                Label:
+                    id: white_color_label
+                    text: 'White'
+                    bold: True
+                    font_size: 20
+                    size_hint: (1, 0.10)
 
                 CheckBox:
                     id: white_color_checkbox
@@ -76,475 +87,493 @@
                 on_press: app.stop()
 
         GridLayout:
+            id: buttons_widget
             cols: 8
             rows: 8
 
             spacing: 1
 
-            # ROW 1:
-            Button:
-                id: board_button_1
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_2
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_3
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_4
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_5
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_6
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_7
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_8
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            # ROW 2:
-            Button:
-                id: board_button_9
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-
-            Button:
-                id: board_button_10
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_11
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_12
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_13
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_14
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_15
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_16
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            # ROW 3:
-            Button:
-                id: board_button_17
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_18
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_19
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_20
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_21
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_22
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_23
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_24
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            # ROW 4:
-            Button:
-                id: board_button_25
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_26
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_27
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_28
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_29
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_30
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_31
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_32
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            # ROW 5:
-            Button:
-                id: board_button_33
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-
-            Button:
-                id: board_button_34
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_35
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_36
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_37
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_38
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_39
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_40
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            # ROW 6:
-
-            Button:
-                id: board_button_41
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_42
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_43
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_44
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_45
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_46
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_47
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_48
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            #ROW 7:
-
-            Button:
-                id: board_button_49
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_50
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_51
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_52
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_53
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_54
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_55
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_56
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            # ROW 8:
-
-            Button:
-                id: board_button_57
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_58
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_59
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_60
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_61
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_62
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_63
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/black_blank.png'
-                background_down: 'img/clicked.png'
-
-            Button:
-                id: board_button_64
-                font_size: 32
-                size_hint: (0.1, 0.15)
-                background_normal: 'img/white_blank.png'
-                background_down: 'img/clicked.png'
+#            # ROW 1:
+#            Button:
+#                id: board_button_1
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_2
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_3
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_4
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_5
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_6
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_7
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_8
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            # ROW 2:
+#            Button:
+#                id: board_button_9
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#
+#            Button:
+#                id: board_button_10
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_11
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_12
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_13
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_14
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_15
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_16
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            # ROW 3:
+#            Button:
+#                id: board_button_17
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_18
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_19
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_20
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_21
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_22
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_23
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_24
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            # ROW 4:
+#            Button:
+#                id: board_button_25
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_26
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_27
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_28
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_29
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_30
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_31
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_32
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            # ROW 5:
+#            Button:
+#                id: board_button_33
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(33)
+#
+#
+#            Button:
+#                id: board_button_34
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(34)
+#
+#            Button:
+#                id: board_button_35
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(35)
+#
+#            Button:
+#                id: board_button_36
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(36)
+#
+#            Button:
+#                id: board_button_37
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(37)
+#
+#            Button:
+#                id: board_button_38
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(38)
+#
+#            Button:
+#                id: board_button_39
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(39)
+#
+#            Button:
+#                id: board_button_40
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.pawn_move(40)
+#
+#            # ROW 6:
+#
+#            Button:
+#                id: board_button_41
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(41)
+#
+#            Button:
+#                id: board_button_42
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(42)
+#
+#
+#            Button:
+#                id: board_button_43
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(43)
+#
+#            Button:
+#                id: board_button_44
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(44)
+#
+#            Button:
+#                id: board_button_45
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(45)
+#
+#            Button:
+#                id: board_button_46
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(46)
+#
+#            Button:
+#                id: board_button_47
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(47)
+#
+#            Button:
+#                id: board_button_48
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#                on_press: root.board_field_clicked(48)
+#
+#            #ROW 7:
+#
+#            Button:
+#                id: board_button_49
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_50
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_51
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_52
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_53
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_54
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_55
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_56
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            # ROW 8:
+#
+#            Button:
+#                id: board_button_57
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_58
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_59
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_60
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_61
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_62
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_63
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/black_blank.png'
+#                background_down: 'img/clicked.png'
+#
+#            Button:
+#                id: board_button_64
+#                font_size: 32
+#                size_hint: (0.1, 0.15)
+#                background_normal: 'img/white_blank.png'
+#                background_down: 'img/clicked.png'
 
         Label:
             id: footer_label
-            font_size: 12
+            font_size: 14
             text: 'Checkers Game - Wrobel Mateusz'
             bold: True
             color: (.231, .353, .553, 1)
