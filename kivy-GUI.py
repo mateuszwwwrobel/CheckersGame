@@ -8,7 +8,7 @@ from kivy.clock import mainthread
 
 from kivy.core.window import Window
 
-from CheckersClasses import Board, Men
+from CheckersClasses import Board, Pawn
 
 
 class CheckersLayout(Widget):
@@ -20,6 +20,7 @@ class CheckersLayout(Widget):
         self.last_clicked_button = None
         self.board_button = {}
         self.init_buttons()
+        self.turn = 'white'
         super(CheckersLayout, self).__init__()
 
     @mainthread
@@ -44,9 +45,8 @@ class CheckersLayout(Widget):
 
     def new_game(self, checkbox_1, checkbox_2):
         """
-            When clicked initialize new game. According to player choice puts black or white mens
-            on bottom part of the board.
-
+            When clicked initialize new game. Validate which color has been chosen. According to player
+            choice puts black or white mens on bottom and upper part of the board.
         """
 
         if checkbox_1.active:
@@ -76,7 +76,9 @@ class CheckersLayout(Widget):
             Method which creates a backend board according to Board classes. Creates a frontend board
             in Kivy GUI and bind a self.board_field_clicked method to each button.
         """
-        # Initialize backend board.
+
+        # Initialize backend board and reset turn.
+        self.turn = 'white'
         self.board = Board(self.bottom_color)
 
         # Initialize frontend board.
@@ -113,45 +115,68 @@ class CheckersLayout(Widget):
 
             After validation it makes a move on backend Board class using Board.make_men_move_on_board method.
         """
+
         button_number = int(button_instance.text)
         button_code = self.board.board[button_number]
         button_instance = self.board.field[button_code]
 
-        if isinstance(button_instance, Men) and self.last_clicked_button is None:
-            if button_instance.color == self.bottom_color:
-                if self.bottom_color == 'black':
+        if isinstance(button_instance, Pawn) and self.last_clicked_button is None:
+            if button_instance.color == self.turn:
+                if self.turn == 'black':
+                    print('first black')
                     self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = 'img/trans_black.png'
                 else:
+                    print('first white')
                     self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = 'img/trans_white.png'
 
         elif self.last_clicked_button is not None:
-            if isinstance(button_instance, Men):
-                if self.bottom_color == 'black':
+            if isinstance(button_instance, Pawn):
+                if self.turn == 'black':
+                    print('middle black')
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_black_men.png'
                     self.last_clicked_button = None
                 else:
+                    print('middle white')
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_white_men.png'
                     self.last_clicked_button = None
             else:
-                allowed_moves = Men.get_allowed_player_moves(self.last_clicked_button, button_number)
+                if self.turn == self.bottom_color:
+                    print('allowed bottom')
+                    allowed_moves = Pawn.get_allowed_bottom_moves(self.last_clicked_button, button_number)
+                else:
+                    print('allowed top')
+                    allowed_moves = Pawn.get_allowed_upper_moves(self.last_clicked_button, button_number)
 
                 if button_number in allowed_moves:
                     current_code = self.board.board[self.last_clicked_button]
                     new_code = self.board.board[button_number]
-                    self.board.make_men_move_on_board(current_code, new_code, self.bottom_color)
+                    self.board.make_pawn_move_on_board(current_code, new_code, self.turn)
 
-                    if self.bottom_color == 'black':
+                    if self.turn == 'black':
                         self.board_button[button_number].background_normal = 'img/black_black_men.png'
+                        print('end black')
                     else:
                         self.board_button[button_number].background_normal = 'img/black_white_men.png'
+                        print('end white')
 
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_blank.png'
                     self.last_clicked_button = None
+                    self.change_turn()
+                    print('end')
 
-    def king_move(self):
-        pass
+    def get_board(self):
+        return self.board
+
+    # def ai_move(self, board):
+    #     self.board = board
+
+    def change_turn(self):
+        if self.turn == 'white':
+            self.turn = 'black'
+        else:
+            self.turn = 'white'
 
     def popup_box_new_game(self):
         popup_widget = FloatLayout()

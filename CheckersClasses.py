@@ -17,46 +17,10 @@ class Board:
             self.upper_color = 'white'
         self.board = {}
         self.field = {}
+        self.white_pawns = self.black_pawns = 0
+        self.white_kings = self.black_kings = 0
 
         self.init_board()
-
-    def init_board(self):
-        """ Initialize 8x8 board for english draughts(checkers) variation.
-
-        """
-
-        columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        rows = ['1', '2', '3', '4', '5', '6', '7', '8']
-
-        positions = [(row, column)for row in reversed(rows) for column in columns]
-
-        for field_number, position in zip(range(1, 65), positions):
-            self.field[''.join(position)] = None
-            self.board[field_number] = ''.join(position)
-
-        # Initialize a starting positions for white and black men.
-        upper_starting_fields = []
-        [upper_starting_fields.append(field) for field in self.field.keys()]
-        upper_starting_fields = (upper_starting_fields[1:8:2] +
-                                 upper_starting_fields[8:16:2] +
-                                 upper_starting_fields[17:24:2]
-                                 )
-
-        bottom_starting_fields = []
-        [bottom_starting_fields.append(field) for field in self.field.keys()]
-        bottom_starting_fields = (bottom_starting_fields[40:48:2] +
-                                  bottom_starting_fields[49:56:2] +
-                                  bottom_starting_fields[56:64:2]
-                                  )
-
-        for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
-
-            if self.bottom_color == 'white':
-                self.field[upper_field] = Men('black')
-                self.field[bottom_field] = Men('white')
-            else:
-                self.field[upper_field] = Men('white')
-                self.field[bottom_field] = Men('black')
 
     def __str__(self):
         board_field_code = []
@@ -97,20 +61,76 @@ class Board:
 
         return printable_board
 
-    def make_men_move_on_board(self, current_position, new_position, color):
+    def init_board(self):
+        """ Initialize 8x8 board for english draughts(checkers) variation.
+
+        """
+
+        columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        rows = ['1', '2', '3', '4', '5', '6', '7', '8']
+
+        positions = [(row, column)for row in reversed(rows) for column in columns]
+
+        for field_number, position in zip(range(1, 65), positions):
+            self.field[''.join(position)] = None
+            self.board[field_number] = ''.join(position)
+
+        # Initialize a starting positions for white and black men.
+        upper_starting_fields = []
+        [upper_starting_fields.append(field) for field in self.field.keys()]
+        upper_starting_fields = (upper_starting_fields[1:8:2] +
+                                 upper_starting_fields[8:16:2] +
+                                 upper_starting_fields[17:24:2]
+                                 )
+
+        bottom_starting_fields = []
+        [bottom_starting_fields.append(field) for field in self.field.keys()]
+        bottom_starting_fields = (bottom_starting_fields[40:48:2] +
+                                  bottom_starting_fields[49:56:2] +
+                                  bottom_starting_fields[56:64:2]
+                                  )
+
+        for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
+
+            if self.bottom_color == 'white':
+                self.field[upper_field] = Pawn('black')
+                self.field[bottom_field] = Pawn('white')
+                self.white_kings = self.black_pawns = 12
+            else:
+                self.field[upper_field] = Pawn('white')
+                self.field[bottom_field] = Pawn('black')
+                self.white_kings = self.black_pawns = 12
+
+    def make_pawn_move_on_board(self, current_position, new_position, color):
         self.field[current_position] = None
 
         current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
         new_field_number = list(self.board.keys())[list(self.board.values()).index(new_position)]
 
-        if Men.get_allowed_player_moves(current_field_number, new_field_number) and self.field[new_position] is None:
+        if Pawn.get_allowed_bottom_moves(current_field_number, new_field_number) and self.field[new_position] is None:
             if color == 'white':
-                self.field[new_position] = Men('white')
+                self.field[new_position] = Pawn('white')
             else:
-                self.field[new_position] = Men('black')
+                self.field[new_position] = Pawn('black')
+
+    def evaluate_min_max(self):
+        """
+            Evaluates a difference between amount of white and black pawns and kings.
+        """
+        return self.white_pawns - self.black_pawns + (self.white_kings * 0.5 - self.black_kings * 0.5)
+
+    def get_all_pieces(self, color):
+        """
+            Get all pawns and kings in certain color to the pawns list and return it.
+        """
+        pawns = []
+        for field in self.field.values():
+            if field is not None and field.color == color:
+                pawns.append(field)
+        return pawns
 
 
-class Men:
+class Pawn:
     """
         Create a men which could be either black or white. Can be assign to a self.field variable.
 
@@ -128,7 +148,7 @@ class Men:
         return f"{self.color.capitalize()} Men"
 
     @staticmethod
-    def get_allowed_player_moves(current_field_number, new_field_number):
+    def get_allowed_bottom_moves(current_field_number, new_field_number):
         allowed_moves = []
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
@@ -149,8 +169,30 @@ class Men:
         else:
             return allowed_moves
 
+    @staticmethod
+    def get_allowed_upper_moves(current_field_number, new_field_number):
+        allowed_moves = []
 
-class King(Men):
+        right_border = [8, 16, 24, 32, 40, 48, 56, 64]
+        left_border = [1, 9, 17, 25, 33, 41, 49, 57]
+        top_row = [1, 2, 3, 4, 5, 6, 7, 8]
+        bottom_row = [57, 58, 59, 60, 61, 62, 63, 64]
+
+        if current_field_number in left_border:
+            allowed_moves.append(current_field_number + 7)
+        elif current_field_number in right_border:
+            allowed_moves.append(current_field_number + 9)
+        else:
+            allowed_moves.append(current_field_number + 7)
+            allowed_moves.append(current_field_number + 9)
+
+        if new_field_number in allowed_moves:
+            return allowed_moves
+        else:
+            return allowed_moves
+
+
+class King(Pawn):
     """
         Create a king which could be either black or white. Can be assign to a self.field variable.
 
@@ -172,23 +214,21 @@ class King(Men):
 if __name__ == '__main__':
     print("\nHello Checkers!\n")
     board = Board('black')
-    print(board)
 
-    white_men = Men('white')
+    white_men = Pawn('white')
     # print(white_men)
-    black_men = Men('black')
+    black_men = Pawn('black')
     # print(black_men.color)
     # print(type(black_men.color))
     # print(white_men.color)
     # print(black_men)
 
-    board.make_men_move_on_board('3A', '4B', black_men.color)
+    board.make_pawn_move_on_board('3A', '4B', black_men.color)
     # board.make_men_move_on_board('3A', '4B', black_men.color)
     # board.make_men_move_on_board('6H', '5G', white_men.color)
     # board.make_men_move_on_board('4B', '5C', black_men.color)
     # board.make_men_move_on_board('5C', '6D', black_men.color)
-
-    print(board)
+    board.get_all_pieces('black')
 
     # black_King = King('white')
     # print(black_King)
