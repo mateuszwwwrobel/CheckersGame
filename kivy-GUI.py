@@ -24,6 +24,9 @@ class CheckersLayout(Widget):
 
     @mainthread
     def init_buttons(self):
+        """
+            Method which initialize 64 buttons which create a 8x8 board for checkers game.
+        """
         white_fields = [1, 3, 5, 7, 10, 12, 14, 16, 17, 19, 21, 23, 26, 28, 30, 32,
                         33, 35, 37, 39, 42, 44, 46, 48, 49, 51, 53, 55, 58, 60, 62, 64]
         for button_number in range(1, 65):
@@ -69,6 +72,10 @@ class CheckersLayout(Widget):
             info_button.bind(on_press=popup_message.dismiss)
 
     def put_pawns_on_board(self):
+        """
+            Method which creates a backend board according to Board classes. Creates a frontend board
+            in Kivy GUI and bind a self.board_field_clicked method to each button.
+        """
         # Initialize backend board.
         self.board = Board(self.bottom_color)
 
@@ -98,16 +105,27 @@ class CheckersLayout(Widget):
             self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
     def board_field_clicked(self, button_instance):
+        """
+            Method validate:
+                - if our move is in Men class method 'get_allowed_player_moves',
+                - if selected button has been clicked,
+                - if chosen move can be done according to self.last_button_clicked variable,
+
+            After validation it makes a move on backend Board class using Board.make_men_move_on_board method.
+        """
         button_number = int(button_instance.text)
         button_code = self.board.board[button_number]
         button_instance = self.board.field[button_code]
 
         if isinstance(button_instance, Men) and self.last_clicked_button is None:
             if button_instance.color == self.bottom_color:
-                self.last_clicked_button = button_number
-                self.board_button[button_number].background_normal = 'img/clicked.png'
-            else:
-                pass
+                if self.bottom_color == 'black':
+                    self.last_clicked_button = button_number
+                    self.board_button[button_number].background_normal = 'img/trans_black.png'
+                else:
+                    self.last_clicked_button = button_number
+                    self.board_button[button_number].background_normal = 'img/trans_white.png'
+
         elif self.last_clicked_button is not None:
             if isinstance(button_instance, Men):
                 if self.bottom_color == 'black':
@@ -131,8 +149,6 @@ class CheckersLayout(Widget):
 
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_blank.png'
                     self.last_clicked_button = None
-        else:
-            pass
 
     def king_move(self):
         pass

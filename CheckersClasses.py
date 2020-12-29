@@ -104,12 +104,10 @@ class Board:
         new_field_number = list(self.board.keys())[list(self.board.values()).index(new_position)]
 
         if Men.get_allowed_player_moves(current_field_number, new_field_number) and self.field[new_position] is None:
-            if color is 'white':
+            if color == 'white':
                 self.field[new_position] = Men('white')
             else:
                 self.field[new_position] = Men('black')
-        else:
-            return False
 
 
 class Men:
