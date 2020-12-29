@@ -123,30 +123,24 @@ class CheckersLayout(Widget):
         if isinstance(button_instance, Pawn) and self.last_clicked_button is None:
             if button_instance.color == self.turn:
                 if self.turn == 'black':
-                    print('first black')
                     self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = 'img/trans_black.png'
                 else:
-                    print('first white')
                     self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = 'img/trans_white.png'
 
         elif self.last_clicked_button is not None:
             if isinstance(button_instance, Pawn):
                 if self.turn == 'black':
-                    print('middle black')
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_black_men.png'
                     self.last_clicked_button = None
                 else:
-                    print('middle white')
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_white_men.png'
                     self.last_clicked_button = None
             else:
                 if self.turn == self.bottom_color:
-                    print('allowed bottom')
                     allowed_moves = Pawn.get_allowed_bottom_moves(self.last_clicked_button, button_number)
                 else:
-                    print('allowed top')
                     allowed_moves = Pawn.get_allowed_upper_moves(self.last_clicked_button, button_number)
 
                 if button_number in allowed_moves:
@@ -156,21 +150,19 @@ class CheckersLayout(Widget):
 
                     if self.turn == 'black':
                         self.board_button[button_number].background_normal = 'img/black_black_men.png'
-                        print('end black')
                     else:
                         self.board_button[button_number].background_normal = 'img/black_white_men.png'
-                        print('end white')
 
                     self.board_button[self.last_clicked_button].background_normal = 'img/black_blank.png'
                     self.last_clicked_button = None
                     self.change_turn()
-                    print('end')
 
     def get_board(self):
         return self.board
 
-    # def ai_move(self, board):
-    #     self.board = board
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()
 
     def change_turn(self):
         if self.turn == 'white':

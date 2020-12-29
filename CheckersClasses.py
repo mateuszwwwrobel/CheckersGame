@@ -153,8 +153,6 @@ class Pawn:
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
         left_border = [1, 9, 17, 25, 33, 41, 49, 57]
-        top_row = [1, 2, 3, 4, 5, 6, 7, 8]
-        bottom_row = [57, 58, 59, 60, 61, 62, 63, 64]
 
         if current_field_number in left_border:
             allowed_moves.append(current_field_number - 7)
@@ -175,8 +173,6 @@ class Pawn:
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
         left_border = [1, 9, 17, 25, 33, 41, 49, 57]
-        top_row = [1, 2, 3, 4, 5, 6, 7, 8]
-        bottom_row = [57, 58, 59, 60, 61, 62, 63, 64]
 
         if current_field_number in left_border:
             allowed_moves.append(current_field_number + 7)
@@ -208,6 +204,10 @@ class King(Pawn):
 
     def get_all_allowed_moves(self, current_position):
         allowed_moves = []
+
+        top_row = [1, 2, 3, 4, 5, 6, 7, 8]
+        bottom_row = [57, 58, 59, 60, 61, 62, 63, 64]
+
         pass
 
 
