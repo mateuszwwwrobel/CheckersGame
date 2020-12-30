@@ -9,6 +9,8 @@ from kivy.clock import mainthread
 from kivy.core.window import Window
 
 from CheckersClasses import Board, Pawn
+from constants import BLACK, WHITE, BLANK_WHITE, BLANK_DARK, WHITE_PAWN, \
+                      BLACK_PAWN, CLICKED_BLACK_PAWN, CLICKED_WHITE_PAWN, CLICKED_BLANK, ICON
 
 
 class CheckersLayout(Widget):
@@ -20,7 +22,7 @@ class CheckersLayout(Widget):
         self.last_clicked_button = None
         self.board_button = {}
         self.init_buttons()
-        self.turn = 'white'
+        self.turn = WHITE
         super(CheckersLayout, self).__init__()
 
     @mainthread
@@ -33,13 +35,13 @@ class CheckersLayout(Widget):
         for button_number in range(1, 65):
             if button_number in white_fields:
                 button = Button()
-                button.background_normal = 'img/white_blank.png'
-                button.background_down = 'img/clicked.png'
+                button.background_normal = BLANK_WHITE
+                button.background_down = CLICKED_BLANK
             else:
                 button = Button(text=f'{button_number}')
-                button.background_normal = 'img/black_blank.png'
+                button.background_normal = BLANK_DARK
                 button.color = (1, 1, 1, 0)
-                button.background_down = 'img/clicked.png'
+                button.background_down = CLICKED_BLANK
             self.ids.buttons_widget.add_widget(button)
             self.board_button[button_number] = button
 
@@ -50,21 +52,21 @@ class CheckersLayout(Widget):
         """
 
         if checkbox_1.active:
-            self.bottom_color = 'black'
-            self.upper_color = 'white'
+            self.bottom_color = BLACK
+            self.upper_color = WHITE
             self.popup_box_new_game()
 
         elif checkbox_2.active:
-            self.bottom_color = 'white'
-            self.upper_color = 'black'
+            self.bottom_color = WHITE
+            self.upper_color = BLACK
             self.popup_box_new_game()
 
         else:
             info_button = Button(text='Please choose a color first.',
                                  font_size=22,
                                  bold=True,
-                                 background_normal='img/white_blank.png',
-                                 background_down='img/clicked.png',
+                                 background_normal=BLANK_WHITE,
+                                 background_down=CLICKED_BLANK,
                                  color=(.231, .353, .553, 1),
                                  )
             popup_message = self.popup_box_message('Color Error', info_button)
@@ -78,7 +80,7 @@ class CheckersLayout(Widget):
         """
 
         # Initialize backend board and reset turn.
-        self.turn = 'white'
+        self.turn = WHITE
         self.board = Board(self.bottom_color)
 
         # Initialize frontend board.
@@ -86,24 +88,24 @@ class CheckersLayout(Widget):
         bottom_starting_fields = [41, 43, 45, 47, 50, 52, 54, 56, 57, 59, 61, 63]
         middle_fields = [25, 27, 29, 31, 34, 36, 38, 40]
 
-        if self.bottom_color == 'black':
+        if self.bottom_color == BLACK:
             for field_number in bottom_starting_fields:
-                self.board_button[field_number].background_normal = 'img/black_black_men.png'
+                self.board_button[field_number].background_normal = BLACK_PAWN
                 self.board_button[field_number].bind(on_press=self.board_field_clicked)
             for field_number in upper_starting_fields:
-                self.board_button[field_number].background_normal = 'img/black_white_men.png'
+                self.board_button[field_number].background_normal = WHITE_PAWN
                 self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
         else:
             for field_number in bottom_starting_fields:
-                self.board_button[field_number].background_normal = 'img/black_white_men.png'
+                self.board_button[field_number].background_normal = WHITE_PAWN
                 self.board_button[field_number].bind(on_press=self.board_field_clicked)
             for field_number in upper_starting_fields:
-                self.board_button[field_number].background_normal = 'img/black_black_men.png'
+                self.board_button[field_number].background_normal = BLACK_PAWN
                 self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
         for field_number in middle_fields:
-            self.board_button[field_number].background_normal = 'img/black_blank.png'
+            self.board_button[field_number].background_normal = BLANK_DARK
             self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
     def board_field_clicked(self, button_instance):
@@ -122,20 +124,20 @@ class CheckersLayout(Widget):
 
         if isinstance(button_instance, Pawn) and self.last_clicked_button is None:
             if button_instance.color == self.turn:
-                if self.turn == 'black':
+                if self.turn == BLACK:
                     self.last_clicked_button = button_number
-                    self.board_button[button_number].background_normal = 'img/trans_black.png'
+                    self.board_button[button_number].background_normal = CLICKED_BLACK_PAWN
                 else:
                     self.last_clicked_button = button_number
-                    self.board_button[button_number].background_normal = 'img/trans_white.png'
+                    self.board_button[button_number].background_normal = CLICKED_WHITE_PAWN
 
         elif self.last_clicked_button is not None:
             if isinstance(button_instance, Pawn):
-                if self.turn == 'black':
-                    self.board_button[self.last_clicked_button].background_normal = 'img/black_black_men.png'
+                if self.turn == BLACK:
+                    self.board_button[self.last_clicked_button].background_normal = BLACK_PAWN
                     self.last_clicked_button = None
                 else:
-                    self.board_button[self.last_clicked_button].background_normal = 'img/black_white_men.png'
+                    self.board_button[self.last_clicked_button].background_normal = WHITE_PAWN
                     self.last_clicked_button = None
             else:
                 if self.turn == self.bottom_color:
@@ -146,14 +148,14 @@ class CheckersLayout(Widget):
                 if button_number in allowed_moves:
                     current_code = self.board.board[self.last_clicked_button]
                     new_code = self.board.board[button_number]
-                    self.board.make_pawn_move_on_board(current_code, new_code, self.turn)
+                    self.board.move_pawn(current_code, new_code, self.turn)
 
-                    if self.turn == 'black':
-                        self.board_button[button_number].background_normal = 'img/black_black_men.png'
+                    if self.turn == BLACK:
+                        self.board_button[button_number].background_normal = BLACK_PAWN
                     else:
-                        self.board_button[button_number].background_normal = 'img/black_white_men.png'
+                        self.board_button[button_number].background_normal = WHITE_PAWN
 
-                    self.board_button[self.last_clicked_button].background_normal = 'img/black_blank.png'
+                    self.board_button[self.last_clicked_button].background_normal = BLANK_DARK
                     self.last_clicked_button = None
                     self.change_turn()
 
@@ -165,10 +167,10 @@ class CheckersLayout(Widget):
         self.change_turn()
 
     def change_turn(self):
-        if self.turn == 'white':
-            self.turn = 'black'
+        if self.turn == WHITE:
+            self.turn = BLACK
         else:
-            self.turn = 'white'
+            self.turn = WHITE
 
     def popup_box_new_game(self):
         popup_widget = FloatLayout()
@@ -213,7 +215,7 @@ class CheckersLayout(Widget):
 
 
 class CheckersApp(App):
-    icon = 'img/icon.png'
+    icon = ICON
 
     def build(self):
         Window.size = (1100, 1100)

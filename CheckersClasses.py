@@ -1,3 +1,4 @@
+from constants import BLACK, WHITE
 
 
 class Board:
@@ -11,13 +12,13 @@ class Board:
 
     def __init__(self, color):
         self.bottom_color = color
-        if self.bottom_color == 'white':
-            self.upper_color = 'black'
+        if self.bottom_color == WHITE:
+            self.upper_color = BLACK
         else:
-            self.upper_color = 'white'
+            self.upper_color = WHITE
         self.board = {}
         self.field = {}
-        self.white_pawns = self.black_pawns = 0
+        self.white_left = self.black_left = 12
         self.white_kings = self.black_kings = 0
 
         self.init_board()
@@ -92,32 +93,43 @@ class Board:
 
         for upper_field, bottom_field in zip(upper_starting_fields, bottom_starting_fields):
 
-            if self.bottom_color == 'white':
-                self.field[upper_field] = Pawn('black')
-                self.field[bottom_field] = Pawn('white')
-                self.white_kings = self.black_pawns = 12
+            if self.bottom_color == WHITE:
+                self.field[upper_field] = Pawn(BLACK)
+                self.field[bottom_field] = Pawn(WHITE)
             else:
-                self.field[upper_field] = Pawn('white')
-                self.field[bottom_field] = Pawn('black')
-                self.white_kings = self.black_pawns = 12
+                self.field[upper_field] = Pawn(WHITE)
+                self.field[bottom_field] = Pawn(BLACK)
 
-    def make_pawn_move_on_board(self, current_position, new_position, color):
+    def move_pawn(self, current_position, new_position, color):
         self.field[current_position] = None
 
         current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
         new_field_number = list(self.board.keys())[list(self.board.values()).index(new_position)]
 
         if Pawn.get_allowed_bottom_moves(current_field_number, new_field_number) and self.field[new_position] is None:
-            if color == 'white':
-                self.field[new_position] = Pawn('white')
+            if color == WHITE:
+                self.field[new_position] = Pawn(WHITE)
             else:
-                self.field[new_position] = Pawn('black')
+                self.field[new_position] = Pawn(BLACK)
+
+    def win(self):
+        """
+            Return white or black string value to determine if player win.
+        """
+
+        if self.white_left <= 0:
+            return WHITE
+        elif self.black_left <= 0:
+            return BLACK
+
+        return None
 
     def evaluate_min_max(self):
         """
             Evaluates a difference between amount of white and black pawns and kings.
         """
-        return self.white_pawns - self.black_pawns + (self.white_kings * 0.5 - self.black_kings * 0.5)
+
+        return self.white_left - self.black_left + (self.white_kings * 0.5 - self.black_kings * 0.5)
 
     def get_all_pieces(self, color):
         """
@@ -136,16 +148,16 @@ class Pawn:
 
     """
 
-    color = ['black', 'white']
+    color = [BLACK, WHITE]
 
-    def __init__(self, men_color):
-        if men_color in self.color:
-            self.color = men_color
+    def __init__(self, pawn_color):
+        if pawn_color in self.color:
+            self.color = pawn_color
         else:
             self.color = ''
 
     def __str__(self):
-        return f"{self.color.capitalize()} Men"
+        return f"{self.color.capitalize()} Pawn"
 
     @staticmethod
     def get_allowed_bottom_moves(current_field_number, new_field_number):
@@ -194,7 +206,7 @@ class King(Pawn):
 
     """
 
-    color = ['black', 'white']
+    color = [BLACK, WHITE]
 
     def __init__(self, king_color):
         super().__init__(king_color)
@@ -223,7 +235,7 @@ if __name__ == '__main__':
     # print(white_men.color)
     # print(black_men)
 
-    board.make_pawn_move_on_board('3A', '4B', black_men.color)
+    board.move_pawn('3A', '4B', black_men.color)
     # board.make_men_move_on_board('3A', '4B', black_men.color)
     # board.make_men_move_on_board('6H', '5G', white_men.color)
     # board.make_men_move_on_board('4B', '5C', black_men.color)
