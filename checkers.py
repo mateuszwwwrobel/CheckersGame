@@ -106,7 +106,7 @@ class Board:
         current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
         new_field_number = list(self.board.keys())[list(self.board.values()).index(new_position)]
 
-        if Pawn.get_allowed_bottom_moves(current_field_number, new_field_number) and self.field[new_position] is None:
+        if Pawn.get_all_allowed_bottom_moves(current_field_number, new_field_number) and self.field[new_position] is None:
             if color == WHITE:
                 self.field[new_position] = Pawn(WHITE)
             else:
@@ -123,23 +123,6 @@ class Board:
             return BLACK
 
         return None
-
-    def evaluate_min_max(self):
-        """
-            Evaluates a difference between amount of white and black pawns and kings.
-        """
-
-        return self.white_left - self.black_left + (self.white_kings * 0.5 - self.black_kings * 0.5)
-
-    def get_all_pieces(self, color):
-        """
-            Get all pawns and kings in certain color to the pawns list and return it.
-        """
-        pawns = []
-        for field in self.field.values():
-            if field is not None and field.color == color:
-                pawns.append(field)
-        return pawns
 
 
 class Pawn:
@@ -160,7 +143,7 @@ class Pawn:
         return f"{self.color.capitalize()} Pawn"
 
     @staticmethod
-    def get_allowed_bottom_moves(current_field_number, new_field_number):
+    def get_all_allowed_bottom_moves(current_field_number, new_field_number):
         allowed_moves = []
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
@@ -180,16 +163,16 @@ class Pawn:
             return allowed_moves
 
     @staticmethod
-    def get_allowed_upper_moves(current_field_number, new_field_number):
+    def get_all_allowed_upper_moves(current_field_number, new_field_number):
         allowed_moves = []
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
         left_border = [1, 9, 17, 25, 33, 41, 49, 57]
 
         if current_field_number in left_border:
-            allowed_moves.append(current_field_number + 7)
-        elif current_field_number in right_border:
             allowed_moves.append(current_field_number + 9)
+        elif current_field_number in right_border:
+            allowed_moves.append(current_field_number + 7)
         else:
             allowed_moves.append(current_field_number + 7)
             allowed_moves.append(current_field_number + 9)
@@ -240,7 +223,7 @@ if __name__ == '__main__':
     # board.make_men_move_on_board('6H', '5G', white_men.color)
     # board.make_men_move_on_board('4B', '5C', black_men.color)
     # board.make_men_move_on_board('5C', '6D', black_men.color)
-    board.get_all_pieces('black')
+
 
     # black_King = King('white')
     # print(black_King)
