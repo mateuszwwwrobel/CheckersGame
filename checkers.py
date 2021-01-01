@@ -124,6 +124,22 @@ class Board:
 
         return None
 
+    def delete_pawn_or_king(self, field_number):
+        """
+            Delete pawn or king from a board.
+        """
+        field_code = self.board[field_number]
+
+        self.field[field_code] = None
+        return field_code
+
+    def change_pawn_to_king(self, field_number, color):
+        """
+            Change pawn to king.
+        """
+        field_code = self.board[field_number]
+        self.field[field_code] = King(color)
+
 
 class Pawn:
     """
@@ -151,11 +167,15 @@ class Pawn:
 
         if current_field_number in left_border:
             allowed_moves.append(current_field_number - 7)
+            allowed_moves.append(current_field_number - 14)
         elif current_field_number in right_border:
             allowed_moves.append(current_field_number - 9)
+            allowed_moves.append(current_field_number - 18)
         else:
             allowed_moves.append(current_field_number - 7)
             allowed_moves.append(current_field_number - 9)
+            allowed_moves.append(current_field_number - 14)
+            allowed_moves.append(current_field_number - 18)
 
         if new_field_number in allowed_moves:
             return allowed_moves
@@ -171,11 +191,15 @@ class Pawn:
 
         if current_field_number in left_border:
             allowed_moves.append(current_field_number + 9)
+            allowed_moves.append(current_field_number + 18)
         elif current_field_number in right_border:
             allowed_moves.append(current_field_number + 7)
+            allowed_moves.append(current_field_number + 14)
         else:
             allowed_moves.append(current_field_number + 7)
+            allowed_moves.append(current_field_number + 14)
             allowed_moves.append(current_field_number + 9)
+            allowed_moves.append(current_field_number + 18)
 
         if new_field_number in allowed_moves:
             return allowed_moves
@@ -223,7 +247,11 @@ if __name__ == '__main__':
     # board.make_men_move_on_board('6H', '5G', white_men.color)
     # board.make_men_move_on_board('4B', '5C', black_men.color)
     # board.make_men_move_on_board('5C', '6D', black_men.color)
+    # board.change_pawn_to_king('4B', BLACK)
 
+    board.delete_pawn_or_king(34)
+
+    print(board)
 
     # black_King = King('white')
     # print(black_King)

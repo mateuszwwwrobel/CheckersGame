@@ -151,15 +151,48 @@ class CheckersLayout(Widget):
                     current_code = self.board.board[self.last_clicked_button]
                     new_code = self.board.board[button_number]
                     self.board.move_pawn(current_code, new_code, self.turn)
-
-                    if self.turn == BLACK:
-                        self.board_button[button_number].background_normal = BLACK_PAWN
-                    else:
-                        self.board_button[button_number].background_normal = WHITE_PAWN
+                    self.validate_color_position(button_number)
 
                     self.board_button[self.last_clicked_button].background_normal = BLANK_DARK
                     self.last_clicked_button = None
                     self.change_turn()
+
+    def validate_color_position(self, button_number):
+        """
+            Function that checks which side there is white and black color.
+        """
+        if self.bottom_color == BLACK:
+            if self.turn == BLACK:
+                self.board_button[button_number].background_normal = BLACK_PAWN
+            else:
+                self.board_button[button_number].background_normal = WHITE_PAWN
+            self.jump_check(button_number)
+
+        else:
+            if self.turn == BLACK:
+                self.board_button[button_number].background_normal = BLACK_PAWN
+            else:
+                self.board_button[button_number].background_normal = WHITE_PAWN
+            self.jump_check(button_number)
+
+    def jump_check(self, button_number):
+        """
+            Function that checks whether the move made has jumped the pawn.
+        """
+        skipped = self.last_clicked_button - button_number
+
+        if skipped == 18:
+            self.board_button[self.last_clicked_button - 9].background_normal = BLANK_DARK
+            self.board.delete_pawn_or_king(self.last_clicked_button - 9)
+        elif skipped == 14:
+            self.board_button[self.last_clicked_button - 7].background_normal = BLANK_DARK
+            self.board.delete_pawn_or_king(self.last_clicked_button - 7)
+        elif skipped == -18:
+            self.board_button[self.last_clicked_button + 9].background_normal = BLANK_DARK
+            self.board.delete_pawn_or_king(self.last_clicked_button + 9)
+        elif skipped == -14:
+            self.board_button[self.last_clicked_button + 7].background_normal = BLANK_DARK
+            self.board.delete_pawn_or_king(self.last_clicked_button + 7)
 
     def change_turn(self):
         if self.turn == WHITE:
@@ -180,9 +213,12 @@ class CheckersLayout(Widget):
         # Check if field is not taken by other pawn
         valid_moves = []
         for move in all_moves:
-            button_code = self.board.board[move]
-            if not isinstance(self.board.field[button_code], Pawn):
-                valid_moves.append(move)
+            if move in range(1, 65):
+                button_code = self.board.board[move]
+                if not isinstance(self.board.field[button_code], Pawn):
+                    valid_moves.append(move)
+            else:
+                pass
 
         return valid_moves
 
