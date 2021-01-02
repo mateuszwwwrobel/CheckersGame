@@ -9,7 +9,7 @@ from kivy.clock import mainthread
 from kivy.core.window import Window
 
 from checkers import Board, Pawn
-from constants import BLACK, WHITE, BLANK_WHITE, BLANK_DARK, WHITE_PAWN, \
+from constants import BLACK, WHITE, BLANK_WHITE, BLANK_DARK, WHITE_PAWN, BLACK_KING, WHITE_KING, \
                       BLACK_PAWN, CLICKED_BLACK_PAWN, CLICKED_WHITE_PAWN, CLICKED_BLANK, ICON
 
 
@@ -154,6 +154,7 @@ class CheckersLayout(Widget):
                     self.validate_color_position(button_number)
 
                     self.board_button[self.last_clicked_button].background_normal = BLANK_DARK
+                    self.board.win()
                     self.last_clicked_button = None
                     self.change_turn()
 

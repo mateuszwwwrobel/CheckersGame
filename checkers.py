@@ -118,8 +118,10 @@ class Board:
         """
 
         if self.white_left <= 0:
+            print('winner white')
             return WHITE
         elif self.black_left <= 0:
+            print('winner black')
             return BLACK
 
         return None
@@ -158,8 +160,28 @@ class Pawn:
     def __str__(self):
         return f"{self.color.capitalize()} Pawn"
 
+    # Add validation for pawn in the middle.
+
+    # @staticmethod
+    # def pawn_jump_validation(field_number, current_player_color, board_instance):
+    #     """
+    #         The function checks if the hypothetical pawn on the diagonal field is of
+    #         a different color than the color of the currently playing player.
+    #     """
+    #     field_code = board_instance[field_number]
+    #
+    #     if board_instance.field[field_code] is not None:
+    #         if board_instance.field[field_code].color != current_player_color:
+    #             return True
+    #     else:
+    #         return False
+
     @staticmethod
     def get_all_allowed_bottom_moves(current_field_number, new_field_number):
+        """
+            Function that takes all the possible moves from selected field for bottom part
+            of the board  and add it to the list which returns.
+        """
         allowed_moves = []
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
@@ -167,14 +189,22 @@ class Pawn:
 
         if current_field_number in left_border:
             allowed_moves.append(current_field_number - 7)
+
+            # if Pawn.pawn_jump_validation(current_field_number - 7, current_player_color, board_inst):
             allowed_moves.append(current_field_number - 14)
         elif current_field_number in right_border:
             allowed_moves.append(current_field_number - 9)
+
+            # if Pawn.pawn_jump_validation(current_field_number - 9, current_player_color, board_inst):
             allowed_moves.append(current_field_number - 18)
         else:
             allowed_moves.append(current_field_number - 7)
-            allowed_moves.append(current_field_number - 9)
+
+            # if Pawn.pawn_jump_validation(current_field_number - 7, current_player_color, board_inst):
             allowed_moves.append(current_field_number - 14)
+            allowed_moves.append(current_field_number - 9)
+
+            # if Pawn.pawn_jump_validation(current_field_number - 9, current_player_color, board_inst):
             allowed_moves.append(current_field_number - 18)
 
         if new_field_number in allowed_moves:
@@ -184,6 +214,10 @@ class Pawn:
 
     @staticmethod
     def get_all_allowed_upper_moves(current_field_number, new_field_number):
+        """
+            Function that takes all the possible moves from selected field for upper part
+            of the board  and add it to the list which returns.
+        """
         allowed_moves = []
 
         right_border = [8, 16, 24, 32, 40, 48, 56, 64]
@@ -191,14 +225,22 @@ class Pawn:
 
         if current_field_number in left_border:
             allowed_moves.append(current_field_number + 9)
+
+            # if Pawn.pawn_jump_validation(current_field_number + 9, current_player_color, board_inst):
             allowed_moves.append(current_field_number + 18)
         elif current_field_number in right_border:
             allowed_moves.append(current_field_number + 7)
+
+            # if Pawn.pawn_jump_validation(current_field_number + 7, current_player_color, board_inst):
             allowed_moves.append(current_field_number + 14)
         else:
             allowed_moves.append(current_field_number + 7)
+
+            # if Pawn.pawn_jump_validation(current_field_number + 7, current_player_color, board_inst):
             allowed_moves.append(current_field_number + 14)
             allowed_moves.append(current_field_number + 9)
+
+            # if Pawn.pawn_jump_validation(current_field_number + 9, current_player_color, board_inst):
             allowed_moves.append(current_field_number + 18)
 
         if new_field_number in allowed_moves:
@@ -242,16 +284,16 @@ if __name__ == '__main__':
     # print(white_men.color)
     # print(black_men)
 
-    board.move_pawn('3A', '4B', black_men.color)
-    # board.make_men_move_on_board('3A', '4B', black_men.color)
-    # board.make_men_move_on_board('6H', '5G', white_men.color)
-    # board.make_men_move_on_board('4B', '5C', black_men.color)
-    # board.make_men_move_on_board('5C', '6D', black_men.color)
-    # board.change_pawn_to_king('4B', BLACK)
-
-    board.delete_pawn_or_king(34)
-
-    print(board)
+    # board.move_pawn('3A', '4B', black_men.color)
+    # # board.make_men_move_on_board('3A', '4B', black_men.color)
+    # # board.make_men_move_on_board('6H', '5G', white_men.color)
+    # # board.make_men_move_on_board('4B', '5C', black_men.color)
+    # # board.make_men_move_on_board('5C', '6D', black_men.color)
+    # # board.change_pawn_to_king('4B', BLACK)
+    #
+    # board.delete_pawn_or_king(34)
+    #
+    # print(board)
 
     # black_King = King('white')
     # print(black_King)
