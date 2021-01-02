@@ -127,11 +127,11 @@ class CheckersLayout(Widget):
                 if self.turn == BLACK:
                     self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = CLICKED_BLACK_PAWN
-                    self.valid_moves(pawn_instance, self.last_clicked_button, button_number)
+                    # self.valid_moves(pawn_instance, self.last_clicked_button, button_number)
                 else:
                     self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = CLICKED_WHITE_PAWN
-                    self.valid_moves(pawn_instance, self.last_clicked_button, button_number)
+                    # self.valid_moves(pawn_instance, self.last_clicked_button, button_number)
 
         elif self.last_clicked_button is not None:
             if isinstance(pawn_instance, Pawn):
@@ -143,9 +143,9 @@ class CheckersLayout(Widget):
                     self.last_clicked_button = None
             else:
                 if self.turn == self.bottom_color:
-                    allowed_moves = Pawn.get_all_allowed_bottom_moves(self.last_clicked_button, button_number)
+                    allowed_moves = self.board.get_all_bottom_moves(self.last_clicked_button, button_number, self.turn)
                 else:
-                    allowed_moves = Pawn.get_all_allowed_upper_moves(self.last_clicked_button, button_number)
+                    allowed_moves = self.board.get_all_upper_moves(self.last_clicked_button, button_number, self.turn)
 
                 if button_number in allowed_moves:
                     current_code = self.board.board[self.last_clicked_button]
@@ -201,27 +201,27 @@ class CheckersLayout(Widget):
         else:
             self.turn = WHITE
 
-    def valid_moves(self, pawn_instance, current_field_number, new_field_number):
-        """
-            This function takes all possible moves from selected field and validate if
-            new field is not taken by another pawn instance.
-        """
-        if pawn_instance.color == self.bottom_color:
-            all_moves = pawn_instance.get_all_allowed_bottom_moves(current_field_number, new_field_number)
-        else:
-            all_moves = pawn_instance.get_all_allowed_upper_moves(current_field_number, new_field_number)
-
-        # Check if field is not taken by other pawn
-        valid_moves = []
-        for move in all_moves:
-            if move in range(1, 65):
-                button_code = self.board.board[move]
-                if not isinstance(self.board.field[button_code], Pawn):
-                    valid_moves.append(move)
-            else:
-                pass
-
-        return valid_moves
+    # def valid_moves(self, pawn_instance, current_field_number, new_field_number):
+    #     """
+    #         This function takes all possible moves from selected field and validate if
+    #         new field is not taken by another pawn instance.
+    #     """
+    #     if pawn_instance.color == self.bottom_color:
+    #         all_moves = self.board.get_all_allowed_bottom_moves(current_field_number, new_field_number, self.turn)
+    #     else:
+    #         all_moves = self.board.get_all_allowed_upper_moves(current_field_number, new_field_number, self.turn)
+    #
+    #     # Check if field is not taken by other pawn
+    #     valid_moves = []
+    #     for move in all_moves:
+    #         if move in range(1, 65):
+    #             button_code = self.board.board[move]
+    #             if not isinstance(self.board.field[button_code], Pawn):
+    #                 valid_moves.append(move)
+    #         else:
+    #             pass
+    #
+    #     return valid_moves
 
     def popup_box_new_game(self):
         popup_widget = FloatLayout()
