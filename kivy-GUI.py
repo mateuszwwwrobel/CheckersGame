@@ -122,6 +122,8 @@ class CheckersLayout(Widget):
         button_code = self.board.board[button_number]
         pawn_instance = self.board.field[button_code]
 
+        # if KING :
+
         if isinstance(pawn_instance, Pawn) and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
                 if self.turn == BLACK:
@@ -158,9 +160,12 @@ class CheckersLayout(Widget):
                     self.change_turn()
 
     def king_validation(self):
+        """
+            Function which checks if any pawns on top and bottom row meet condition to become a King.
+        """
         top_row = [2, 4, 6, 8]
         bottom_row = [57, 59, 61, 63]
-        # Skrócić kod??
+
         for field_number in top_row:
             button_code = self.board.board[field_number]
             pawn_instance = self.board.field[button_code]
@@ -171,6 +176,7 @@ class CheckersLayout(Widget):
                     continue
                 elif pawn_instance.color == BLACK:
                     self.board.change_pawn_to_king(field_number, BLACK)
+                    self.change_pawn_to_king_gui(field_number)
             else:
                 if pawn_instance is None:
                     continue
@@ -178,6 +184,7 @@ class CheckersLayout(Widget):
                     continue
                 elif pawn_instance.color == WHITE:
                     self.board.change_pawn_to_king(field_number, WHITE)
+                    self.change_pawn_to_king_gui(field_number)
 
         for field_number in bottom_row:
             button_code = self.board.board[field_number]
@@ -189,6 +196,7 @@ class CheckersLayout(Widget):
                     continue
                 elif pawn_instance.color == WHITE:
                     self.board.change_pawn_to_king(field_number, WHITE)
+                    self.change_pawn_to_king_gui(field_number)
             else:
                 if pawn_instance is None:
                     continue
@@ -196,6 +204,13 @@ class CheckersLayout(Widget):
                     continue
                 elif pawn_instance.color == BLACK:
                     self.board.change_pawn_to_king(field_number, BLACK)
+                    self.change_pawn_to_king_gui(field_number)
+
+    def change_pawn_to_king_gui(self, field_number):
+        if self.turn == BLACK:
+            self.board_button[field_number].background_normal = BLACK_KING
+        else:
+            self.board_button[field_number].background_normal = WHITE_KING
 
     def validate_color_position(self, button_number):
         """
