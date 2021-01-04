@@ -10,7 +10,8 @@ from kivy.core.window import Window
 
 from checkers import Board, Pawn, King
 from constants import BLACK, WHITE, BLANK_WHITE, BLANK_DARK, WHITE_PAWN, BLACK_KING, WHITE_KING, \
-                      BLACK_PAWN, CLICKED_BLACK_PAWN, CLICKED_WHITE_PAWN, CLICKED_BLANK, ICON
+                      BLACK_PAWN, CLICKED_BLACK_PAWN, CLICKED_WHITE_PAWN, CLICKED_BLANK, ICON, \
+                      CLICKED_BLACK_KING, CLICKED_WHITE_KING, AVAILABLE
 
 
 class CheckersLayout(Widget):
@@ -124,22 +125,19 @@ class CheckersLayout(Widget):
 
         if isinstance(pawn_instance, Pawn) and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
+                self.last_clicked_button = button_number
                 if self.turn == BLACK:
-                    self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = CLICKED_BLACK_PAWN
                 else:
-                    self.last_clicked_button = button_number
                     self.board_button[button_number].background_normal = CLICKED_WHITE_PAWN
 
         elif isinstance(pawn_instance, King) and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
-                # TODO: change clicked image
+                self.last_clicked_button = button_number
                 if self.turn == BLACK:
-                    self.last_clicked_button = button_number
-                    self.board_button[button_number].background_normal = CLICKED_BLACK_PAWN
+                    self.board_button[button_number].background_normal = CLICKED_BLACK_KING
                 else:
-                    self.last_clicked_button = button_number
-                    self.board_button[button_number].background_normal = CLICKED_WHITE_PAWN
+                    self.board_button[button_number].background_normal = CLICKED_WHITE_KING
 
         elif self.last_clicked_button is not None:
 

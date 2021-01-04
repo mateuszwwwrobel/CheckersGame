@@ -77,7 +77,7 @@ class Board:
             self.field[''.join(position)] = None
             self.board[field_number] = ''.join(position)
 
-        # Initialize a starting positions for white and black men.
+        # Initialize a starting positions for white and black pawns.
         upper_starting_fields = []
         [upper_starting_fields.append(field) for field in self.field.keys()]
         upper_starting_fields = (upper_starting_fields[1:8:2] +
