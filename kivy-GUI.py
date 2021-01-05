@@ -144,17 +144,16 @@ class CheckersLayout(Widget):
             else:
                 field_code = self.board.board[self.last_clicked_button]
                 field_instance = self.board.field[field_code]
-
                 if self.turn == self.bottom_color:
                     if type(field_instance) == Pawn:
                         allowed_moves = self.board.get_all_bottom_moves(self.last_clicked_button, self.turn)
                     else:
-                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
                 else:
                     if type(field_instance) == Pawn:
                         allowed_moves = self.board.get_all_upper_moves(self.last_clicked_button, self.turn)
                     else:
-                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
 
                 if button_number in allowed_moves:
                     current_code = self.board.board[self.last_clicked_button]
@@ -167,11 +166,35 @@ class CheckersLayout(Widget):
 
                     self.validate_color_position(button_number, field_instance)
                     self.board_button[self.last_clicked_button].background_normal = BLANK_DARK
-                    self.board.win()
+                    self.win()
                     self.king_validation()
                     self.last_clicked_button = None
                     self.reset_fields_on_board()
                     self.change_turn()
+
+    def win(self):
+        if self.board.win() == BLACK:
+            info_button = Button(text='Black player win!',
+                                 font_size=22,
+                                 bold=True,
+                                 background_normal=BLANK_WHITE,
+                                 background_down=CLICKED_BLANK,
+                                 color=(.231, .353, .553, 1),
+                                 )
+            popup_message = self.popup_box_message('Congratulation!', info_button)
+            popup_message.open()
+            info_button.bind(on_press=popup_message.dismiss)
+        elif self.board.win() == WHITE:
+            info_button = Button(text='White player win!.',
+                                 font_size=22,
+                                 bold=True,
+                                 background_normal=BLANK_WHITE,
+                                 background_down=CLICKED_BLANK,
+                                 color=(.231, .353, .553, 1),
+                                 )
+            popup_message = self.popup_box_message('Congratulation!', info_button)
+            popup_message.open()
+            info_button.bind(on_press=popup_message.dismiss)
 
     def select_field_gui(self, button_number, instance_type):
         """
@@ -194,7 +217,7 @@ class CheckersLayout(Widget):
             possible moves on board.
         """
         if type(instance_type) == King:
-            allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+            allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
         else:
             if self.bottom_color == BLACK:
                 if self.turn == BLACK:
@@ -312,14 +335,14 @@ class CheckersLayout(Widget):
                 self.gui_field_appearance(instance_type, button_number, BLACK)
             else:
                 self.gui_field_appearance(instance_type, button_number, WHITE)
-            self.jump_pawn_check(button_number)
+            self.jump_check(button_number, instance_type)
 
         else:
             if self.turn == BLACK:
                 self.gui_field_appearance(instance_type, button_number, BLACK)
             else:
                 self.gui_field_appearance(instance_type, button_number, WHITE)
-            self.jump_pawn_check(button_number)
+            self.jump_check(button_number, instance_type)
 
     def gui_field_appearance(self, instance_type, button_number, color):
         """
@@ -336,29 +359,81 @@ class CheckersLayout(Widget):
             else:
                 self.board_button[button_number].background_normal = WHITE_KING
 
-    def jump_pawn_check(self, button_number):
+    def jump_check(self, button_number, instance_type):
         """
             Function that checks whether the move made has jumped the pawn.
         """
         skipped = self.last_clicked_button - button_number
 
-        if skipped == 18:
-            self.board_button[self.last_clicked_button - 9].background_normal = BLANK_DARK
-            self.board.delete_pawn_or_king(self.last_clicked_button - 9)
-            self.board.subtract_piece_from_board()
-        elif skipped == 14:
-            self.board_button[self.last_clicked_button - 7].background_normal = BLANK_DARK
-            self.board.delete_pawn_or_king(self.last_clicked_button - 7)
-            self.board.subtract_piece_from_board()
-        elif skipped == -18:
-            self.board_button[self.last_clicked_button + 9].background_normal = BLANK_DARK
-            self.board.delete_pawn_or_king(self.last_clicked_button + 9)
-            self.board.subtract_piece_from_board()
-        elif skipped == -14:
-            self.board_button[self.last_clicked_button + 7].background_normal = BLANK_DARK
-            self.board.delete_pawn_or_king(self.last_clicked_button + 7)
-            self.board.subtract_piece_from_board()
+        if type(instance_type) == Pawn:
+            if skipped == 18:
+                self.board_button[self.last_clicked_button - 9].background_normal = BLANK_DARK
+                self.board.delete_pawn_or_king(self.last_clicked_button - 9)
+                self.board.subtract_piece_from_board()
+            elif skipped == 14:
+                self.board_button[self.last_clicked_button - 7].background_normal = BLANK_DARK
+                self.board.delete_pawn_or_king(self.last_clicked_button - 7)
+                self.board.subtract_piece_from_board()
+            elif skipped == -18:
+                self.board_button[self.last_clicked_button + 9].background_normal = BLANK_DARK
+                self.board.delete_pawn_or_king(self.last_clicked_button + 9)
+                self.board.subtract_piece_from_board()
+            elif skipped == -14:
+                self.board_button[self.last_clicked_button + 7].background_normal = BLANK_DARK
+                self.board.delete_pawn_or_king(self.last_clicked_button + 7)
+                self.board.subtract_piece_from_board()
 
+        elif type(instance_type) == King:
+            print(skipped)
+
+            # x = skipped % 7
+            # y = skipped % 9
+            #
+            # field_code = self.board.board[button_number + 9]
+            # field_instance = self.board.field[field_code]
+            # field_type = type(field_instance)
+            # if field_type == Pawn or field_type == King:
+            #     self.board.delete_pawn_or_king(button_number + 9)
+            #     self.board.subtract_piece_from_board()
+
+            diagonal = skipped % 9
+            opposite_diagonal = skipped % 7
+
+            if diagonal == 0:
+                if skipped > 0:
+                    field_code = self.board.board[button_number + 9]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number + 9)
+                        self.board.subtract_piece_from_board()
+
+                elif skipped < 0:
+                    field_code = self.board.board[button_number - 9]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number - 9)
+                        self.board.subtract_piece_from_board()
+
+            if opposite_diagonal == 0:
+                if skipped > 0:
+                    field_code = self.board.board[button_number + 7]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    print(field_type)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number + 7)
+                        self.board.subtract_piece_from_board()
+
+                elif skipped < 0:
+                    field_code = self.board.board[button_number - 7]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    print(field_type)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number - 7)
+                        self.board.subtract_piece_from_board()
 
     def king_jump_check(self):
         # new position +- 7,9 ?
