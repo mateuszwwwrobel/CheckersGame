@@ -103,8 +103,6 @@ class Board:
     def move_pawn(self, current_position, new_position, color):
         self.field[current_position] = None
 
-        # current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
-
         if self.field[new_position] is None:
             if color == WHITE:
                 self.field[new_position] = Pawn(WHITE)

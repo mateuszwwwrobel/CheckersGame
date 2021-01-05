@@ -384,8 +384,56 @@ class CheckersLayout(Widget):
                 self.board.subtract_piece_from_board()
 
         elif type(instance_type) == King:
-            # validation for king
-            pass
+            print(skipped)
+
+            # x = skipped % 7
+            # y = skipped % 9
+            #
+            # field_code = self.board.board[button_number + 9]
+            # field_instance = self.board.field[field_code]
+            # field_type = type(field_instance)
+            # if field_type == Pawn or field_type == King:
+            #     self.board.delete_pawn_or_king(button_number + 9)
+            #     self.board.subtract_piece_from_board()
+
+            diagonal = skipped % 9
+            opposite_diagonal = skipped % 7
+
+            if diagonal == 0:
+                if skipped > 0:
+                    field_code = self.board.board[button_number + 9]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number + 9)
+                        self.board.subtract_piece_from_board()
+
+                elif skipped < 0:
+                    field_code = self.board.board[button_number - 9]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number - 9)
+                        self.board.subtract_piece_from_board()
+
+            if opposite_diagonal == 0:
+                if skipped > 0:
+                    field_code = self.board.board[button_number + 7]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    print(field_type)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number + 7)
+                        self.board.subtract_piece_from_board()
+
+                elif skipped < 0:
+                    field_code = self.board.board[button_number - 7]
+                    field_instance = self.board.field[field_code]
+                    field_type = type(field_instance)
+                    print(field_type)
+                    if field_type == Pawn or field_type == King:
+                        self.board.delete_pawn_or_king(button_number - 7)
+                        self.board.subtract_piece_from_board()
 
     def king_jump_check(self):
         # new position +- 7,9 ?
