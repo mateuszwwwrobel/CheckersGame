@@ -103,25 +103,20 @@ class Board:
     def move_pawn(self, current_position, new_position, color):
         self.field[current_position] = None
 
-        current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
+        # current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
 
-        if self.get_all_bottom_moves(current_field_number, self.turn) \
-        and self.field[new_position] is None:
+        if self.field[new_position] is None:
             if color == WHITE:
                 self.field[new_position] = Pawn(WHITE)
                 self.change_turn()
-                print(f'white : {self.white_left}')
             else:
                 self.field[new_position] = Pawn(BLACK)
                 self.change_turn()
-                print(f'black : {self.black_left}')
 
     def move_king(self, current_position, new_position, color):
         self.field[current_position] = None
 
-        current_field_number = list(self.board.keys())[list(self.board.values()).index(current_position)]
-
-        if self.get_king_allowed_moves(current_field_number, self.turn) and self.field[new_position] is None:
+        if self.field[new_position] is None:
             if color == WHITE:
                 self.field[new_position] = King(WHITE)
                 self.change_turn()
@@ -131,9 +126,9 @@ class Board:
 
     def subtract_piece_from_board(self):
         if self.turn == BLACK:
-            self.white_left -= 1
-        else:
             self.black_left -= 1
+        else:
+            self.white_left -= 1
 
     def change_turn(self):
         if self.turn == WHITE:
@@ -207,8 +202,6 @@ class Board:
         else:
             allowed_moves.append(current_field_number - 7)
             if self.pawn_jump_validation(current_field_number - 7, current_player_color):
-                if current_field_number == 15:
-                    pass
                 allowed_moves.append(current_field_number - 14)
 
             allowed_moves.append(current_field_number - 9)
@@ -252,7 +245,8 @@ class Board:
 
         return filter_moves
 
-    def get_king_allowed_moves(self, current_field_number, color):
+    @staticmethod
+    def get_king_allowed_moves(current_field_number):
         allowed_moves = []
 
         right_border = [8, 24, 40, 56]
@@ -307,7 +301,8 @@ class Board:
 
         return allowed_moves
 
-    def white_field_filter(self, field_list):
+    @staticmethod
+    def white_field_filter(field_list):
         """
             Function that filter all available moves if there is not any white field accidentally.
         """
@@ -365,18 +360,16 @@ if __name__ == '__main__':
     # print(white_men.color)
     # print(black_men)
 
-    # board.move_pawn('3A', '4B', black_men.color)
-    # # board.make_men_move_on_board('3A', '4B', black_men.color)
-    # # board.make_men_move_on_board('6H', '5G', white_men.color)
-    # # board.make_men_move_on_board('4B', '5C', black_men.color)
-    # # board.make_men_move_on_board('5C', '6D', black_men.color)
-    # # board.change_pawn_to_king('4B', BLACK)
+    #board.move_pawn('3A', '4B', black_men.color)
+    board.move_pawn('6F', '5E', white_men.color)
+    # board.move_pawn('7G', '6F', white_men.color)
+    # board.move_pawn('8F', '7G', white_men.color)
 
-    board.get_king_allowed_moves(24)
+    # board.get_king_allowed_moves(24)
 
     # board.delete_pawn_or_king(34)
     #
-    # print(board)
+    print(board)
 
     # black_King = King('white')
     # print(black_King)

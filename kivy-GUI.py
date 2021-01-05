@@ -144,17 +144,16 @@ class CheckersLayout(Widget):
             else:
                 field_code = self.board.board[self.last_clicked_button]
                 field_instance = self.board.field[field_code]
-
                 if self.turn == self.bottom_color:
                     if type(field_instance) == Pawn:
                         allowed_moves = self.board.get_all_bottom_moves(self.last_clicked_button, self.turn)
                     else:
-                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
                 else:
                     if type(field_instance) == Pawn:
                         allowed_moves = self.board.get_all_upper_moves(self.last_clicked_button, self.turn)
                     else:
-                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+                        allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
 
                 if button_number in allowed_moves:
                     current_code = self.board.board[self.last_clicked_button]
@@ -194,7 +193,7 @@ class CheckersLayout(Widget):
             possible moves on board.
         """
         if type(instance_type) == King:
-            allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+            allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
         else:
             if self.bottom_color == BLACK:
                 if self.turn == BLACK:
