@@ -20,6 +20,6 @@ CLICKED_BLACK_KING = 'img/t_black_king.png'
 CLICKED_BLANK = 'img/clicked.png'
 
 ICON = 'img/icon.png'
-AVAILABLE = 'img/available_move.png'
+AVAILABLE_MOVE = 'img/available_move.png'
 
 

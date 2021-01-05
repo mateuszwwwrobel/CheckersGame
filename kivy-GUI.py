@@ -11,7 +11,7 @@ from kivy.core.window import Window
 from checkers import Board, Pawn, King
 from constants import BLACK, WHITE, BLANK_WHITE, BLANK_DARK, WHITE_PAWN, BLACK_KING, WHITE_KING, \
                       BLACK_PAWN, CLICKED_BLACK_PAWN, CLICKED_WHITE_PAWN, CLICKED_BLANK, ICON, \
-                      CLICKED_BLACK_KING, CLICKED_WHITE_KING, AVAILABLE
+                      CLICKED_BLACK_KING, CLICKED_WHITE_KING, AVAILABLE_MOVE
 
 
 class CheckersLayout(Widget):
@@ -74,7 +74,7 @@ class CheckersLayout(Widget):
             popup_message.open()
             info_button.bind(on_press=popup_message.dismiss)
 
-    def put_pawns_on_board(self):
+    def create_starting_board(self):
         """
             Method which creates a backend board according to Board classes. Creates a frontend board
             in Kivy GUI and bind a self.board_field_clicked method to each button.
@@ -123,24 +123,19 @@ class CheckersLayout(Widget):
         button_code = self.board.board[button_number]
         pawn_instance = self.board.field[button_code]
 
-        if isinstance(pawn_instance, Pawn) and self.last_clicked_button is None:
+        if type(pawn_instance) == Pawn and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
                 self.last_clicked_button = button_number
-                if self.turn == BLACK:
-                    self.board_button[button_number].background_normal = CLICKED_BLACK_PAWN
-                else:
-                    self.board_button[button_number].background_normal = CLICKED_WHITE_PAWN
+                self.select_field_gui(button_number, pawn_instance)
+                self.highlight_available_moves(pawn_instance)
 
-        elif isinstance(pawn_instance, King) and self.last_clicked_button is None:
+        elif type(pawn_instance) == King and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
                 self.last_clicked_button = button_number
-                if self.turn == BLACK:
-                    self.board_button[button_number].background_normal = CLICKED_BLACK_KING
-                else:
-                    self.board_button[button_number].background_normal = CLICKED_WHITE_KING
+                self.select_field_gui(button_number, pawn_instance)
+                self.highlight_available_moves(pawn_instance)
 
         elif self.last_clicked_button is not None:
-
             if isinstance(pawn_instance, Pawn):
                 self.unchecked_selected_field()
             elif isinstance(pawn_instance, King):
@@ -175,10 +170,66 @@ class CheckersLayout(Widget):
                     self.board.win()
                     self.king_validation()
                     self.last_clicked_button = None
+                    self.reset_fields_on_board()
                     self.change_turn()
 
-    def highlight_available_moves(self):
-        pass
+    def select_field_gui(self, button_number, instance_type):
+        """
+            Function which change a appearance of selected field on board.
+        """
+        if self.turn == BLACK:
+            if type(instance_type) == King:
+                self.board_button[button_number].background_normal = CLICKED_BLACK_KING
+            elif type(instance_type) == Pawn:
+                self.board_button[button_number].background_normal = CLICKED_BLACK_PAWN
+        else:
+            if type(instance_type) == King:
+                self.board_button[button_number].background_normal = CLICKED_WHITE_KING
+            elif type(instance_type) == Pawn:
+                self.board_button[button_number].background_normal = CLICKED_WHITE_PAWN
+
+    def highlight_available_moves(self, instance_type):
+        """
+            Function that takes all possible moves from selected field and highlight all
+            possible moves on board.
+        """
+        if type(instance_type) == King:
+            allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button, self.turn)
+        else:
+            if self.bottom_color == BLACK:
+                if self.turn == BLACK:
+                    allowed_moves = self.board.get_all_bottom_moves(self.last_clicked_button, self.turn)
+                else:
+                    allowed_moves = self.board.get_all_upper_moves(self.last_clicked_button, self.turn)
+            else:
+                if self.turn == WHITE:
+                    allowed_moves = self.board.get_all_bottom_moves(self.last_clicked_button, self.turn)
+                else:
+                    allowed_moves = self.board.get_all_upper_moves(self.last_clicked_button, self.turn)
+
+        for field_number in allowed_moves:
+            field_code = self.board.board[field_number]
+            field_instance = self.board.field[field_code]
+            if field_instance is None:
+                self.board_button[field_number].background_normal = AVAILABLE_MOVE
+            else:
+                continue
+
+    def reset_fields_on_board(self):
+        white_fields = [1, 3, 5, 7, 10, 12, 14, 16, 17, 19, 21, 23, 26, 28, 30, 32,
+                        33, 35, 37, 39, 42, 44, 46, 48, 49, 51, 53, 55, 58, 60, 62, 64]
+
+        for field_number in range(1, 64):
+            if field_number in white_fields:
+                continue
+            else:
+                field_code = self.board.board[field_number]
+                field_instance = self.board.field[field_code]
+
+                if field_instance is None:
+                    self.board_button[field_number].background_normal = BLANK_DARK
+                else:
+                    continue
 
     def check_if_jump_is_available(self):
         pass
@@ -190,9 +241,11 @@ class CheckersLayout(Widget):
         if self.turn == BLACK:
             self.board_button[self.last_clicked_button].background_normal = BLACK_PAWN
             self.last_clicked_button = None
+            self.reset_fields_on_board()
         else:
             self.board_button[self.last_clicked_button].background_normal = WHITE_PAWN
             self.last_clicked_button = None
+            self.reset_fields_on_board()
 
     def king_validation(self):
         """
@@ -292,15 +345,20 @@ class CheckersLayout(Widget):
         if skipped == 18:
             self.board_button[self.last_clicked_button - 9].background_normal = BLANK_DARK
             self.board.delete_pawn_or_king(self.last_clicked_button - 9)
+            self.board.subtract_piece_from_board()
         elif skipped == 14:
             self.board_button[self.last_clicked_button - 7].background_normal = BLANK_DARK
             self.board.delete_pawn_or_king(self.last_clicked_button - 7)
+            self.board.subtract_piece_from_board()
         elif skipped == -18:
             self.board_button[self.last_clicked_button + 9].background_normal = BLANK_DARK
             self.board.delete_pawn_or_king(self.last_clicked_button + 9)
+            self.board.subtract_piece_from_board()
         elif skipped == -14:
             self.board_button[self.last_clicked_button + 7].background_normal = BLANK_DARK
             self.board.delete_pawn_or_king(self.last_clicked_button + 7)
+            self.board.subtract_piece_from_board()
+
 
     def king_jump_check(self):
         # new position +- 7,9 ?
@@ -340,7 +398,7 @@ class CheckersLayout(Widget):
         popup_message.open()
 
         button_no.bind(on_release=popup_message.dismiss)
-        button_yes.bind(on_release=lambda x: self.put_pawns_on_board())
+        button_yes.bind(on_release=lambda x: self.create_starting_board())
         button_yes.bind(on_release=popup_message.dismiss)
 
     @staticmethod
