@@ -140,12 +140,10 @@ class Board:
         """
             Return white or black string value to determine if player win.
         """
-        if self.white_left <= 0:
-            print('winner white')
-            return WHITE
-        elif self.black_left <= 0:
-            print('winner black')
+        if self.white_left < 1:
             return BLACK
+        elif self.black_left < 1:
+            return WHITE
 
         return None
 
@@ -306,7 +304,6 @@ class Board:
         """
             Function that filter all available moves if there is not any white field accidentally.
         """
-
         white_fields = [1, 3, 5, 7, 10, 12, 14, 16, 17, 19, 21, 23, 26, 28, 30, 32,
                         33, 35, 37, 39, 42, 44, 46, 48, 49, 51, 53, 55, 58, 60, 62, 64]
         filter_moves = []
