@@ -11,6 +11,9 @@ class Board:
     """
 
     def __init__(self, color):
+        """
+        Constructor for Board class.
+        """
         self.bottom_color = color
         if self.bottom_color == WHITE:
             self.upper_color = BLACK
@@ -63,8 +66,8 @@ class Board:
         return printable_board
 
     def init_board(self):
-        """ Initialize 8x8 board for english draughts(checkers) variation.
-
+        """
+        Initialize 8x8 board for english draughts(checkers) variation.
         """
 
         columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -122,6 +125,80 @@ class Board:
                 self.field[new_position] = King(BLACK)
                 self.change_turn()
 
+    def get_all_available_moves(self, bottom_color):
+        """
+
+        :param bottom_color: Parameter which store a bottom color of board.
+        :return: Dictionary:
+                        {'instance': [current_field_number, [available_moves]]}
+        """
+        # List contain all instances on board with matching field number.
+        instance_and_field_number = []
+        # List contain all instances on board with all available moves.
+        instance_and_all_moves = []
+        final_dict = {}
+
+        for instance, number in zip(self.field.items(), self.board.items()):
+            temp_list = []
+            if instance[1] is not None:
+                temp_list.append(instance[1])
+                temp_list.append(number[0])
+                instance_and_field_number.append(temp_list)
+
+        for item in instance_and_field_number:
+            temp_list = []
+            if bottom_color == item[0].color:
+                if type(item[0]) == Pawn:
+                    moves = self.get_all_bottom_moves(item[1], self.turn)
+                else:
+                    moves = self.get_king_allowed_moves(item[1])
+            else:
+                if type(item[0]) == Pawn:
+                    moves = self.get_all_upper_moves(item[1], self.turn)
+                else:
+                    moves = self.get_king_allowed_moves(item[1])
+
+            temp_list.append(item[0])
+            temp_list.append(moves)
+            instance_and_all_moves.append(temp_list)
+
+        for instance, moves in zip(instance_and_field_number, instance_and_all_moves):
+            temp_list = []
+
+            temp_list.append(instance[1])
+            temp_list.append(moves[1])
+
+            final_dict[instance[0]] = temp_list
+
+        filtered_dict = self.validate_all_moves(final_dict)
+        return filtered_dict
+
+    def validate_all_moves(self, final_dict):
+        filtered_dict = {}
+
+        # Validate if any other pawn/king is on field.
+        for item in final_dict.items():
+            temp_list = []
+
+            temp_list.append(item[1][0])
+            temp_list_1 = []
+            for field in item[1][1]:
+                code_field = self.board[field]
+                if self.field[code_field] is not None:
+                    continue
+                else:
+                    temp_list_1.append(field)
+
+            temp_list.append(temp_list_1)
+
+            # If len(temp_list_1) equal to 0 - no valid moves available for that field.
+            if len(temp_list_1) == 0:
+                continue
+            else:
+                filtered_dict[item[0]] = temp_list
+
+        return filtered_dict
+
     def subtract_piece_from_board(self):
         if self.turn == BLACK:
             self.black_left -= 1
@@ -136,7 +213,7 @@ class Board:
 
     def win(self):
         """
-            Return white or black string value to determine if player win.
+        Return white or black string value to determine if player win.
         """
         if self.white_left < 1:
             return BLACK
@@ -147,7 +224,7 @@ class Board:
 
     def delete_pawn_or_king(self, field_number):
         """
-            Delete pawn or king from a board.
+        Delete pawn or king from a board.
         """
         field_code = self.board[field_number]
 
@@ -156,15 +233,15 @@ class Board:
 
     def change_pawn_to_king(self, field_number, color):
         """
-            Change pawn to king.
+        Change pawn to king.
         """
         field_code = self.board[field_number]
         self.field[field_code] = King(color)
 
     def pawn_jump_validation(self, field_number, current_player_color):
         """
-            The function checks if the hypothetical pawn on the diagonal field is of
-            a different color than the color of the currently playing player.
+        The function checks if the hypothetical pawn on the diagonal field is of
+        a different color than the color of the currently playing player.
         """
         if field_number >= 1:
             field_code = self.board[field_number]
@@ -177,8 +254,8 @@ class Board:
 
     def get_all_bottom_moves(self, current_field_number, current_player_color):
         """
-            Function that takes all the possible moves from selected field for bottom part
-            of the board  and add it to the list which returns.
+        Function that takes all the possible moves from selected field for bottom part
+        of the board  and add it to the list which returns.
         """
         allowed_moves = []
 
@@ -205,13 +282,12 @@ class Board:
                 allowed_moves.append(current_field_number - 18)
 
         filter_moves = self.white_field_filter(allowed_moves)
-
         return filter_moves
 
     def get_all_upper_moves(self, current_field_number, current_player_color):
         """
-            Function that takes all the possible moves from selected field for upper part
-            of the board  and add it to the list which returns.
+        Function that takes all the possible moves from selected field for upper part
+        of the board  and add it to the list which returns.
         """
         allowed_moves = []
 
@@ -238,17 +314,13 @@ class Board:
                 allowed_moves.append(current_field_number + 18)
 
         filter_moves = self.white_field_filter(allowed_moves)
-
         return filter_moves
 
-    @staticmethod
-    def get_king_allowed_moves(current_field_number):
+    def get_king_allowed_moves(self, current_field_number):
         allowed_moves = []
 
         right_border = [8, 24, 40, 56]
         left_border = [9, 25, 41, 57]
-        top_row = [2, 4, 6, 8]
-        bottom_row = [57, 59, 61, 63]
 
         index = 0
         while current_field_number < 57:
@@ -295,12 +367,13 @@ class Board:
             if current_field_number in left_border:
                 break
 
-        return allowed_moves
+        filter_moves = self.king_move_filter(allowed_moves)
+        return filter_moves
 
     @staticmethod
     def white_field_filter(field_list):
         """
-            Function that filter all available moves if there is not any white field accidentally.
+        Function that filter all available moves if there is not any white field accidentally.
         """
         white_fields = [1, 3, 5, 7, 10, 12, 14, 16, 17, 19, 21, 23, 26, 28, 30, 32,
                         33, 35, 37, 39, 42, 44, 46, 48, 49, 51, 53, 55, 58, 60, 62, 64]
@@ -315,14 +388,25 @@ class Board:
 
         return filter_moves
 
+    @staticmethod
+    def king_move_filter(moves_list):
+        filter_moves = []
+        for field_number in moves_list:
+            filter_moves.append(field_number)
+
+        return filter_moves
+
 
 class Pawn:
     """
-        Create a men which could be either black or white. Can be assign to a self.field variable.
+    Create a men which could be either black or white. Can be assign to a self.field variable.
     """
     color = [BLACK, WHITE]
 
     def __init__(self, pawn_color):
+        """
+        Constructor for Pawn class.
+        """
         if pawn_color in self.color:
             self.color = pawn_color
         else:
@@ -334,9 +418,12 @@ class Pawn:
 
 class King(Pawn):
     """
-        Create a king which could be either black or white. Can be assign to a self.field variable.
+    Create a king which could be either black or white. Can be assign to a self.field variable.
     """
     def __init__(self, king_color):
+        """
+        Constructor for King class.
+        """
         super().__init__(king_color)
 
     def __str__(self):
@@ -355,15 +442,16 @@ if __name__ == '__main__':
     # print(white_men.color)
     # print(black_men)
 
-    #board.move_pawn('3A', '4B', black_men.color)
+    board.move_pawn('3A', '4B', black_men.color)
     board.move_pawn('6F', '5E', white_men.color)
-    # board.move_pawn('7G', '6F', white_men.color)
+    board.move_pawn('6B', '5C', white_men.color)
     # board.move_pawn('8F', '7G', white_men.color)
 
     # board.get_king_allowed_moves(24)
+    board.get_all_available_moves('black')
 
     # board.delete_pawn_or_king(34)
-    #
+
     print(board)
 
     # black_King = King('white')
