@@ -2,7 +2,7 @@
 
 A checkers game written in Python using Kivy.
 
-![Window view](https://github.com/mateuszwwwrobel/CheckersGame/tree/main/img/screen.png)
+![image.png](https://github.com/mateuszwwwrobel/CheckersGame/raw/main/img/screen.png)
 
 ## Getting Started
 
