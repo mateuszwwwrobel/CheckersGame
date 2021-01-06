@@ -17,6 +17,9 @@ from constants import BLACK, WHITE, BLANK_WHITE, BLANK_DARK, WHITE_PAWN, BLACK_K
 class CheckersLayout(Widget):
 
     def __init__(self):
+        """
+        Constructor for CheckersLayout class.
+        """
         self.board = None
         self.bottom_color = None
         self.upper_color = None
@@ -29,7 +32,7 @@ class CheckersLayout(Widget):
     @mainthread
     def init_buttons(self):
         """
-            Method which initialize 64 buttons which create a 8x8 board for checkers game.
+        Method which initialize 64 buttons which create a 8x8 board for checkers game.
         """
         white_fields = [1, 3, 5, 7, 10, 12, 14, 16, 17, 19, 21, 23, 26, 28, 30, 32,
                         33, 35, 37, 39, 42, 44, 46, 48, 49, 51, 53, 55, 58, 60, 62, 64]
@@ -48,8 +51,8 @@ class CheckersLayout(Widget):
 
     def new_game(self, checkbox_1, checkbox_2):
         """
-            When clicked initialize new game. Validate which color has been chosen. According to player
-            choice puts black or white mens on bottom and upper part of the board.
+        When clicked initialize new game. Validate which color has been chosen. According to player
+        choice puts black or white mens on bottom and upper part of the board.
         """
 
         if checkbox_1.active:
@@ -76,8 +79,8 @@ class CheckersLayout(Widget):
 
     def create_starting_board(self):
         """
-            Method which creates a backend board according to Board classes. Creates a frontend board
-            in Kivy GUI and bind a self.board_field_clicked method to each button.
+        Method which creates a backend board according to Board classes. Creates a frontend board
+        in Kivy GUI and bind a self.board_field_clicked method to each button.
         """
 
         # Initialize backend board and reset turn.
@@ -110,18 +113,22 @@ class CheckersLayout(Widget):
             self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
     def board_field_clicked(self, pawn_instance):
-        # TODO: might be better to use try, except clause?
+        # TODO: check all possible moves and highlight if any is mandatory
         """
-            Method validate:
-                - if our move is in Pawn class method 'get_allowed_player_moves',
-                - if selected button has been clicked,
-                - if chosen move can be done according to self.last_button_clicked variable,
+        Method validate:
+            - if our move is in Pawn class method 'get_allowed_player_moves',
+            - if selected button has been clicked,
+            - if chosen move can be done according to self.last_button_clicked variable,
 
-            After validation it makes a move on backend Board class using Board.make_men_move_on_board method.
+        After validation it makes a move on backend Board class using Board.make_men_move_on_board method.
         """
         button_number = int(pawn_instance.text)
         button_code = self.board.board[button_number]
         pawn_instance = self.board.field[button_code]
+
+        # function for mandatory jump validation
+        if self.last_clicked_button is None:
+            self.check_mandatory_move()
 
         if type(pawn_instance) == Pawn and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
@@ -172,6 +179,11 @@ class CheckersLayout(Widget):
                     self.reset_fields_on_board()
                     self.change_turn()
 
+    def check_mandatory_move(self):
+        all_moves = self.board.get_all_available_moves(self.bottom_color)
+
+        return all_moves
+
     def win(self):
         if self.board.win() == BLACK:
             info_button = Button(text='Black player win!',
@@ -198,7 +210,7 @@ class CheckersLayout(Widget):
 
     def select_field_gui(self, button_number, instance_type):
         """
-            Function which change a appearance of selected field on board.
+        Function which change a appearance of selected field on board.
         """
         if self.turn == BLACK:
             if type(instance_type) == King:
@@ -213,8 +225,8 @@ class CheckersLayout(Widget):
 
     def highlight_available_moves(self, instance_type):
         """
-            Function that takes all possible moves from selected field and highlight all
-            possible moves on board.
+        Function that takes all possible moves from selected field and highlight all
+        possible moves on board.
         """
         if type(instance_type) == King:
             allowed_moves = self.board.get_king_allowed_moves(self.last_clicked_button)
@@ -259,7 +271,7 @@ class CheckersLayout(Widget):
 
     def unchecked_selected_field(self):
         """
-            Function unchecked selected field.
+        Function unchecked selected field.
         """
         if self.turn == BLACK:
             self.board_button[self.last_clicked_button].background_normal = BLACK_PAWN
@@ -272,7 +284,7 @@ class CheckersLayout(Widget):
 
     def king_validation(self):
         """
-            Function which checks if any pawns on top and bottom row meet condition to become a King.
+        Function which checks if any pawns on top and bottom row meet condition to become a King.
         """
         top_row = [2, 4, 6, 8]
         bottom_row = [57, 59, 61, 63]
@@ -319,7 +331,7 @@ class CheckersLayout(Widget):
 
     def change_pawn_to_king_gui(self, field_number):
         """
-            A function that changes the appearance of a pawn to a king.
+        A function that changes the appearance of a pawn to a king.
         """
         if self.turn == BLACK:
             self.board_button[field_number].background_normal = BLACK_KING
@@ -328,7 +340,7 @@ class CheckersLayout(Widget):
 
     def validate_color_position(self, button_number, instance_type):
         """
-            Function which validate which side there is white and black color.
+        Function which validate which side there is white and black color.
         """
         if self.bottom_color == BLACK:
             if self.turn == BLACK:
@@ -346,7 +358,7 @@ class CheckersLayout(Widget):
 
     def gui_field_appearance(self, instance_type, button_number, color):
         """
-            Function which show King or Pawn on new field.
+        Function which show King or Pawn on new field.
         """
         if type(instance_type) is Pawn:
             if color == BLACK:
@@ -361,7 +373,7 @@ class CheckersLayout(Widget):
 
     def jump_check(self, button_number, instance_type):
         """
-            Function that checks whether the move made has jumped the pawn.
+        Function that checks whether the move made has jumped the pawn.
         """
         skipped = self.last_clicked_button - button_number
 
@@ -384,17 +396,6 @@ class CheckersLayout(Widget):
                 self.board.subtract_piece_from_board()
 
         elif type(instance_type) == King:
-            print(skipped)
-
-            # x = skipped % 7
-            # y = skipped % 9
-            #
-            # field_code = self.board.board[button_number + 9]
-            # field_instance = self.board.field[field_code]
-            # field_type = type(field_instance)
-            # if field_type == Pawn or field_type == King:
-            #     self.board.delete_pawn_or_king(button_number + 9)
-            #     self.board.subtract_piece_from_board()
 
             diagonal = skipped % 9
             opposite_diagonal = skipped % 7
@@ -421,7 +422,6 @@ class CheckersLayout(Widget):
                     field_code = self.board.board[button_number + 7]
                     field_instance = self.board.field[field_code]
                     field_type = type(field_instance)
-                    print(field_type)
                     if field_type == Pawn or field_type == King:
                         self.board.delete_pawn_or_king(button_number + 7)
                         self.board.subtract_piece_from_board()
@@ -430,7 +430,6 @@ class CheckersLayout(Widget):
                     field_code = self.board.board[button_number - 7]
                     field_instance = self.board.field[field_code]
                     field_type = type(field_instance)
-                    print(field_type)
                     if field_type == Pawn or field_type == King:
                         self.board.delete_pawn_or_king(button_number - 7)
                         self.board.subtract_piece_from_board()
