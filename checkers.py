@@ -125,6 +125,80 @@ class Board:
                 self.field[new_position] = King(BLACK)
                 self.change_turn()
 
+    def get_all_available_moves(self, bottom_color):
+        """
+
+        :param bottom_color: Parameter which store a bottom color of board.
+        :return: Dictionary:
+                        {'instance': [current_field_number, [available_moves]]}
+        """
+        # List contain all instances on board with matching field number.
+        instance_and_field_number = []
+        # List contain all instances on board with all available moves.
+        instance_and_all_moves = []
+        final_dict = {}
+
+        for instance, number in zip(self.field.items(), self.board.items()):
+            temp_list = []
+            if instance[1] is not None:
+                temp_list.append(instance[1])
+                temp_list.append(number[0])
+                instance_and_field_number.append(temp_list)
+
+        for item in instance_and_field_number:
+            temp_list = []
+            if bottom_color == item[0].color:
+                if type(item[0]) == Pawn:
+                    moves = self.get_all_bottom_moves(item[1], self.turn)
+                else:
+                    moves = self.get_king_allowed_moves(item[1])
+            else:
+                if type(item[0]) == Pawn:
+                    moves = self.get_all_upper_moves(item[1], self.turn)
+                else:
+                    moves = self.get_king_allowed_moves(item[1])
+
+            temp_list.append(item[0])
+            temp_list.append(moves)
+            instance_and_all_moves.append(temp_list)
+
+        for instance, moves in zip(instance_and_field_number, instance_and_all_moves):
+            temp_list = []
+
+            temp_list.append(instance[1])
+            temp_list.append(moves[1])
+
+            final_dict[instance[0]] = temp_list
+
+        filtered_dict = self.validate_all_moves(final_dict)
+        return filtered_dict
+
+    def validate_all_moves(self, final_dict):
+        filtered_dict = {}
+
+        # Validate if any other pawn/king is on field.
+        for item in final_dict.items():
+            temp_list = []
+
+            temp_list.append(item[1][0])
+            temp_list_1 = []
+            for field in item[1][1]:
+                code_field = self.board[field]
+                if self.field[code_field] is not None:
+                    continue
+                else:
+                    temp_list_1.append(field)
+
+            temp_list.append(temp_list_1)
+
+            # If len(temp_list_1) equal to 0 - no valid moves available for that field.
+            if len(temp_list_1) == 0:
+                continue
+            else:
+                filtered_dict[item[0]] = temp_list
+
+        return filtered_dict
+
     def subtract_piece_from_board(self):
         if self.turn == BLACK:
             self.black_left -= 1
@@ -208,7 +282,6 @@ class Board:
                 allowed_moves.append(current_field_number - 18)
 
         filter_moves = self.white_field_filter(allowed_moves)
-
         return filter_moves
 
     def get_all_upper_moves(self, current_field_number, current_player_color):
@@ -241,7 +314,6 @@ class Board:
                 allowed_moves.append(current_field_number + 18)
 
         filter_moves = self.white_field_filter(allowed_moves)
-
         return filter_moves
 
     def get_king_allowed_moves(self, current_field_number):
@@ -294,12 +366,8 @@ class Board:
             current_field_number -= 9
             if current_field_number in left_border:
                 break
-        print(allowed_moves)
 
         filter_moves = self.king_move_filter(allowed_moves)
-
-        print(filter_moves)
-
         return filter_moves
 
     @staticmethod
@@ -320,13 +388,11 @@ class Board:
 
         return filter_moves
 
-    def king_move_filter(self, moves_list):
+    @staticmethod
+    def king_move_filter(moves_list):
         filter_moves = []
-
         for field_number in moves_list:
-
             filter_moves.append(field_number)
-
 
         return filter_moves
 
@@ -376,15 +442,16 @@ if __name__ == '__main__':
     # print(white_men.color)
     # print(black_men)
 
-    #board.move_pawn('3A', '4B', black_men.color)
+    board.move_pawn('3A', '4B', black_men.color)
     board.move_pawn('6F', '5E', white_men.color)
-    # board.move_pawn('7G', '6F', white_men.color)
+    board.move_pawn('6B', '5C', white_men.color)
     # board.move_pawn('8F', '7G', white_men.color)
 
     # board.get_king_allowed_moves(24)
+    board.get_all_available_moves('black')
 
     # board.delete_pawn_or_king(34)
-    #
+
     print(board)
 
     # black_King = King('white')

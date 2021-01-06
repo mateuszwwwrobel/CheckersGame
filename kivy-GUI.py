@@ -113,7 +113,7 @@ class CheckersLayout(Widget):
             self.board_button[field_number].bind(on_press=self.board_field_clicked)
 
     def board_field_clicked(self, pawn_instance):
-        # TODO: might be better to use try, except clause?
+        # TODO: check all possible moves and highlight if any is mandatory
         """
         Method validate:
             - if our move is in Pawn class method 'get_allowed_player_moves',
@@ -125,6 +125,10 @@ class CheckersLayout(Widget):
         button_number = int(pawn_instance.text)
         button_code = self.board.board[button_number]
         pawn_instance = self.board.field[button_code]
+
+        # function for mandatory jump validation
+        if self.last_clicked_button is None:
+            self.check_mandatory_move()
 
         if type(pawn_instance) == Pawn and self.last_clicked_button is None:
             if pawn_instance.color == self.turn:
@@ -174,6 +178,11 @@ class CheckersLayout(Widget):
                     self.last_clicked_button = None
                     self.reset_fields_on_board()
                     self.change_turn()
+
+    def check_mandatory_move(self):
+        all_moves = self.board.get_all_available_moves(self.bottom_color)
+
+        return all_moves
 
     def win(self):
         if self.board.win() == BLACK:
@@ -387,17 +396,6 @@ class CheckersLayout(Widget):
                 self.board.subtract_piece_from_board()
 
         elif type(instance_type) == King:
-            print(skipped)
-
-            # x = skipped % 7
-            # y = skipped % 9
-            #
-            # field_code = self.board.board[button_number + 9]
-            # field_instance = self.board.field[field_code]
-            # field_type = type(field_instance)
-            # if field_type == Pawn or field_type == King:
-            #     self.board.delete_pawn_or_king(button_number + 9)
-            #     self.board.subtract_piece_from_board()
 
             diagonal = skipped % 9
             opposite_diagonal = skipped % 7
