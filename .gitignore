@@ -5,3 +5,7 @@ test.py
 linki
 
 /__pycache__
+
+.buildozer
+bin
+buildozer.spec
